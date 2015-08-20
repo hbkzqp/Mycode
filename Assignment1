@@ -1,0 +1,34 @@
+<Z-EVES-GUI-State version="1" index="20"><textItem location="gui::8" history="2"><zed-box location="gui::8">[SUBJECT]</zed-box></textItem
+><textItem location="gui::9" history="3"><zed-box location="gui::9">[TIME]</zed-box></textItem
+><textItem location="gui::20" history="4"><zed-box location="gui::20">[COPY]</zed-box></textItem
+><textItem location="gui::11" history="5"><axiomatic-box location="gui::11"><decl-part/>FINE_EVERYDAY: &Nopf;</axiomatic-box></textItem
+><textItem location="gui::1" history="6"><axiomatic-box location="gui::1"><decl-part/>MAXNUMBER: &Nopf;</axiomatic-box></textItem
+><textItem location="gui::2" history="7"><zed-box location="gui::2">[USER]</zed-box></textItem
+><textItem location="gui::3" history="8"><zed-box location="gui::3">[AUTHOR]</zed-box></textItem
+><textItem location="gui::4" history="9"><zed-box location="gui::4">[TITLE]</zed-box></textItem
+><textItem location="gui::7" history="10"><schema-box location="gui::7">BOOK<decl-part/> bookid: &Nopf;
+authors: &Popf; AUTHOR
+title: TITLE
+time: TIME
+subjects: &Popf; SUBJECT
+wait_list:<word style="roman"/>seq<word/> USER</schema-box></textItem
+><textItem location="gui::12" history="11"><schema-box location="gui::12">USERS<decl-part/>    administrators: &Popf; USER
+customers:&Popf; USER<ax-part/>   administrators&cap;customers=&empty;</schema-box></textItem
+><textItem location="gui::16" history="12"><schema-box location="gui::16">BOOKSTORE<decl-part/>  available: &Popf; COPY
+allbooks: &Popf; COPY
+belonging: COPY &rarrb; USER
+copy_info: COPY &rarrb; BOOK
+borrow_time: COPY &rarrb; TIME<ax-part/>  <word style="roman"/>dom<word/> belonging &cup; available = allbooks
+<word style="roman"/>dom<word/> copy_info = allbooks
+available &subeq; allbooks
+&forall;u:USER&bullet; #(belonging&vrtri;{u})&leq;MAXNUMBER
+<word style="roman"/>dom<word/> borrow_time &cup; available = allbooks</schema-box></textItem
+><textItem location="gui::17" history="13"><schema-box location="gui::17">  LIB<decl-part/>BOOKSTORE
+USERS<ax-part/><word style="roman"/>ran<word/>belonging&subeq;administrators&cup;customers</schema-box></textItem
+><textItem location="gui::18" history="14"><schema-box location="gui::18">BORROW<decl-part/>  &Delta;LIB
+borrowuser?: USER
+book?: COPY<ax-part/>  book? &isin; available
+borrowuser?&isin;administrators&cup;customers</schema-box></textItem
+><script name="BOOKSTORE$domainCheck"><scriptItem number="2"><ztext>prove</ztext></scriptItem
+></script
+></Z-EVES-GUI-State>
