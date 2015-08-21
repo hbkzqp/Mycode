@@ -1,4 +1,4 @@
-<Z-EVES-GUI-State version="1" index="27"><textItem location="gui::8" history="2"><zed-box location="gui::8">[SUBJECT]</zed-box></textItem
+<Z-EVES-GUI-State version="1" index="32"><textItem location="gui::8" history="2"><zed-box location="gui::8">[SUBJECT]</zed-box></textItem
 ><textItem location="gui::9" history="3"><zed-box location="gui::9">[TIME]</zed-box></textItem
 ><textItem location="gui::20" history="4"><zed-box location="gui::20">[COPY]</zed-box></textItem
 ><textItem location="gui::26" history="5"><axiomatic-box location="gui::26"><decl-part/>MAXTIME:&Nopf;</axiomatic-box></textItem
@@ -50,6 +50,19 @@ borrow_time' = &empty;</schema-box></textItem
 time?:&Nopf;
 fine!:&Nopf;<ax-part/> time?&gt;borrow_time(book?)
 fine!=FINE_EVERYDAY*(time?-borrow_time(book?))</schema-box></textItem
+><textItem location="gui::28" history="18"><schema-box location="gui::28"> ADDBOOK <decl-part/>   &Delta;LIB
+copy?:COPY
+book?:BOOK<ax-part/>   copy?&notin;allbooks
+copy_info'=copy_info&cup;{copy?&rtarr;book?}</schema-box></textItem
+><textItem location="gui::29" history="19"><schema-box location="gui::29"> REMOVEBOOK <decl-part/> &Delta;LIB
+copy?:COPY<ax-part/> copy?&isin;available
+allbooks'&cup;{copy?}=allbooks
+available'&cup;{copy?} = available</schema-box></textItem
+><textItem location="gui::30" history="20"><schema-box location="gui::30"> ADDCUSTOMER <decl-part/>  &Delta;LIB
+customer?:USER<ax-part/>  customers'=customers&cup;{customer?}</schema-box></textItem
+><textItem location="gui::32" history="21"><schema-box location="gui::32">REMOVECUSTOMER<decl-part/> &Delta;LIB
+customer?: USER<ax-part/> customer? &isin; customers' 
+customers' &cup; {customer?} = customers</schema-box></textItem
 ><script name="FINE$domainCheck"></script
 ><script name="BOOKSTORE$domainCheck"><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
 ></script
