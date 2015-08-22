@@ -16,68 +16,128 @@ subjects: &Popf; SUBJECT
 wait_list: <word style="roman"/>seq<word/> USER</schema-box></textItem
 ><textItem location="gui::12" history="13"><schema-box location="gui::12">USERS<decl-part/>    administrators: &Popf; USER
 customers:&Popf; USER<ax-part/>   administrators&cap;customers=&empty;</schema-box></textItem
-><textItem location="gui::16" history="14"><schema-box location="gui::16">BOOKSTORE<decl-part/> available: &Popf; COPY
+><textItem location="gui::16" history="14"><schema-box location="gui::16">BOOKSTORE<decl-part/>   available: &Popf; COPY
 allbooks: &Popf; COPY
 belonging: COPY &rarrb; USER
 copy_info: COPY &rarrb; BOOK
 borrow_time: COPY &rarrb; &Nopf;
-reservelist: BOOK &rarrb; <word style="roman"/>seq<word/> USER
-borrow_number:USER&rarrb;&Nopf;<ax-part/> <word style="roman"/>dom<word/> belonging &cup; available = allbooks
+reservelist: BOOK &rarrb; &Popf;USER<ax-part/>   <word style="roman"/>dom<word/> belonging &cup; available = allbooks
 <word style="roman"/>dom<word/> copy_info = allbooks
 available &subeq; allbooks
 <word style="roman"/>dom<word/> borrow_time &cup; available = allbooks</schema-box></textItem
-><textItem location="gui::17" history="15"><schema-box location="gui::17">  LIB<decl-part/>BOOKSTORE
-USERS<ax-part/><word style="roman"/>ran<word/>belonging&subeq;administrators&cup;customers</schema-box></textItem
-><textItem location="gui::18" history="16"><schema-box location="gui::18">BORROW<decl-part/> &Delta;LIB
+><textItem location="gui::17" history="15"><schema-box location="gui::17">LIB<decl-part/>     BOOKSTORE
+USERS<ax-part/>     <word style="roman"/>ran<word/> belonging &subeq;administrators &cup; customers
+&exists;users:<word style="roman"/>ran<word/> reservelist&bullet;users&subeq;administrators &cup;customers</schema-box></textItem
+><textItem location="gui::18" history="16"><schema-box location="gui::18">BORROW<decl-part/>   &Delta;LIB
 borrowuser?: USER
 book?: COPY
-time?: &Nopf;<ax-part/> book? &isin; available
+time?: &Nopf;<ax-part/>   book? &isin; available
 borrowuser? &isin; administrators &cup; customers
 # (belonging &vrtri; {borrowuser?}) &lt; MAXNUMBER
-book?&notin;<word style="roman"/>dom<word/> belonging
+book? &notin; <word style="roman"/>dom<word/> belonging
+copy_info(book?)&notin;<word style="roman"/>dom<word/>reservelist
 allbooks' = allbooks
 available' &cup; {book?} = available
 copy_info' = copy_info
 belonging' = belonging &cup; {(book? &rtarr; borrowuser?)}
-borrow_time' = borrow_time &cup; {(book? &rtarr; time?)}</schema-box></textItem
-><textItem location="gui::24" history="17"><schema-box location="gui::24">RETURN<decl-part/>    &Delta;LIB
+borrow_time' = borrow_time &cup; {(book? &rtarr; time?)}
+reservelist'=reservelist
+administrators' = administrators
+customers' = customers</schema-box></textItem
+><textItem location="gui::24" history="17"><schema-box location="gui::24">RETURN<decl-part/>  &Delta;LIB
 book?: COPY
 user?: USER
-time?: &Nopf;<ax-part/>    available' &cup; {book?} = available
+time?: &Nopf;<ax-part/> administrators'= administrators
+customers'=customers
+book?&notin;available
+book?&isin;allbooks
+user?&isin;administrators&cup;customers
+available' &cup; {book?} = available
 allbooks' = allbooks
 belonging' &cup; {(book? &rtarr; user?)} = belonging
 copy_info' = copy_info
-borrow_time' = &empty;</schema-box></textItem
-><textItem location="gui::27" history="18"><schema-box location="gui::27"> FINE <decl-part/> &Xi;LIB
-book?:COPY
-time?:&Nopf;
-fine!:&Nopf;<ax-part/> time?&gt;borrow_time(book?)
-fine!=FINE_EVERYDAY*(time?-borrow_time(book?))</schema-box></textItem
-><textItem location="gui::28" history="19"><schema-box location="gui::28"> ADDBOOK <decl-part/>   &Delta;LIB
-copy?:COPY
-book?:BOOK<ax-part/>   copy?&notin;allbooks
-copy_info'=copy_info&cup;{copy?&rtarr;book?}</schema-box></textItem
-><textItem location="gui::29" history="20"><schema-box location="gui::29"> REMOVEBOOK <decl-part/> &Delta;LIB
-copy?:COPY<ax-part/> copy?&isin;available
-allbooks'&cup;{copy?}=allbooks
-available'&cup;{copy?} = available</schema-box></textItem
+borrow_time' = borrow_time
+reservelist'=reservelist</schema-box></textItem
+><textItem location="gui::27" history="18"><schema-box location="gui::27">FINE<decl-part/> &Xi;LIB
+book?: COPY
+time?: &Nopf;
+fine!: &Nopf;<ax-part/>book?&isin;allbooks
+book?&notin;available
+time? &gt; borrow_time book?
+
+fine! = FINE_EVERYDAY * (time? - borrow_time book?)</schema-box></textItem
+><textItem location="gui::28" history="19"><schema-box location="gui::28">ADDBOOK<decl-part/>  &Delta;LIB
+copy?: COPY
+book?: BOOK<ax-part/>  copy? &notin; allbooks
+copy_info' = copy_info &cup; {(copy? &rtarr; book?)}
+available'=available&cup;{copy?}
+allbooks' = allbooks&cup;{copy?}
+belonging' = belonging
+borrow_time' = borrow_time
+reservelist' = reservelist
+administrators'=administrators
+customers'=customers</schema-box></textItem
+><textItem location="gui::29" history="20"><schema-box location="gui::29">REMOVEBOOK<decl-part/> &Delta;LIB
+copy?: COPY<ax-part/> copy? &isin; available
+allbooks' &cup; {copy?} = allbooks
+available' &cup; {copy?} = available
+administrators'=administrators
+customers'=customers
+belonging'=belonging
+<word style="roman"/>dom<word/>copy_info'=<word style="roman"/>dom<word/>copy_info&cup;{copy?}
+borrow_time=borrow_time'
+reservelist' = reservelist</schema-box></textItem
 ><textItem location="gui::30" history="21"><schema-box location="gui::30">ADDCUSTOMER<decl-part/> &Delta;LIB
-customer?: USER<ax-part/>customer?&notin;customers&cup;administrators
-customers' = customers &cup; {customer?}</schema-box></textItem
+customer?: USER<ax-part/> customer? &notin; customers &cup; administrators
+customers' = customers &cup; {customer?}
+administrators' = administrators
+available' = available
+allbooks' = allbooks
+belonging = belonging'
+copy_info' = copy_info
+borrow_time' = borrow_time
+reservelist' = reservelist</schema-box></textItem
 ><textItem location="gui::32" history="22"><schema-box location="gui::32">REMOVECUSTOMER<decl-part/> &Delta;LIB
-customer?: USER<ax-part/> customer? &isin; customers' 
-customers' &cup; {customer?} = customers</schema-box></textItem
-><textItem location="gui::33" history="23"><schema-box location="gui::33">  ADDADMINISTRTOR<decl-part/>   &Delta;LIB
-administrator?:USER<ax-part/>   administrator?&notin;administrators&cup;customers
-administrators'=administrators&cup;{administrator?}</schema-box></textItem
-><textItem location="gui::34" history="24"><schema-box location="gui::34">  REMOVEADMINISTRATOR<decl-part/>    &Delta;LIB
-administrator?:USER<ax-part/>    administrator?&notin;administrators
-administrators'=administrators&cup;{administrator?}
-administrator?&notin;customers'</schema-box></textItem
-><textItem location="gui::36" history="25"><schema-box location="gui::36"> RESERVE <decl-part/>     &Delta;LIB
-book?:BOOK
-user?:USER<ax-part/>    &not;(<word style="roman"/>dom<word/>(copy_info&vrtri;{book?})&subeq;available)
-(reservelist(book?))&frown;&lang;user?&rang;= reservelist'(book?)</schema-box></textItem
+customer?: USER<ax-part/> customer? &isin; customers'
+customers' &cup; {customer?} = customers
+administrators' = administrators
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info'=copy_info
+borrow_time' = borrow_time
+reservelist' = reservelist</schema-box></textItem
+><textItem location="gui::33" history="23"><schema-box location="gui::33">ADDADMINISTRTOR<decl-part/> &Delta;LIB
+administrator?: USER<ax-part/> administrator? &notin; administrators &cup; customers
+administrators' = administrators &cup; {administrator?}
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time
+reservelist' = reservelist</schema-box></textItem
+><textItem location="gui::34" history="24"><schema-box location="gui::34">REMOVEADMINISTRATOR<decl-part/> &Delta;LIB
+administrator?: USER<ax-part/> administrator? &notin; administrators
+administrators' = administrators &cup; {administrator?}
+administrator? &notin; customers'
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time</schema-box></textItem
+><textItem location="gui::36" history="25"><schema-box location="gui::36">RESERVE<decl-part/>  &Delta;LIB
+book?: BOOK
+user?: USER<ax-part/>  &not; <word style="roman"/>dom<word/> (copy_info &vrtri; {book?}) &subeq; available
+reservelist book? &cup;{user?}= reservelist' book?
+administrators' = administrators'
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time</schema-box></textItem
 ><textItem location="gui::39" history="26"><schema-box location="gui::39">REMIND<decl-part/>              &Delta;LIB
 time?: &Nopf;
 overtimelist!:<word style="roman"/>seq<word/>(COPY)<ax-part/> &exists; copy:(<word style="roman"/>ran<word/> overtimelist!) &bullet; borrow_time copy - time? &lt; TIME_TO_REMIND</schema-box></textItem
