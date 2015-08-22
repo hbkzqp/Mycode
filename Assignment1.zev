@@ -1,4 +1,4 @@
-<Z-EVES-GUI-State version="1" index="39"><textItem location="gui::8" history="2"><zed-box location="gui::8">[SUBJECT]</zed-box></textItem
+<Z-EVES-GUI-State version="1" index="43"><textItem location="gui::8" history="2"><zed-box location="gui::8">[SUBJECT]</zed-box></textItem
 ><textItem location="gui::38" history="3"><axiomatic-box location="gui::38"><decl-part/>TIME_TO_REMIND: &Nopf;</axiomatic-box></textItem
 ><textItem location="gui::9" history="4"><zed-box location="gui::9">[TIME]</zed-box></textItem
 ><textItem location="gui::20" history="5"><zed-box location="gui::20">[COPY]</zed-box></textItem
@@ -11,9 +11,9 @@
 ><textItem location="gui::7" history="12"><schema-box location="gui::7">BOOK<decl-part/> bookid: &Nopf;
 authors: &Popf; AUTHOR
 title: TITLE
-time: TIME
+year: &Nopf;
 subjects: &Popf; SUBJECT
-wait_list:<word style="roman"/>seq<word/> USER</schema-box></textItem
+wait_list: <word style="roman"/>seq<word/> USER</schema-box></textItem
 ><textItem location="gui::12" history="13"><schema-box location="gui::12">USERS<decl-part/>    administrators: &Popf; USER
 customers:&Popf; USER<ax-part/>   administrators&cap;customers=&empty;</schema-box></textItem
 ><textItem location="gui::16" history="14"><schema-box location="gui::16">BOOKSTORE<decl-part/> available: &Popf; COPY
@@ -78,12 +78,25 @@ administrators'=administrators&cup;{administrator?}</schema-box></textItem
 book?:BOOK
 user?:USER<ax-part/>    &not;(<word style="roman"/>dom<word/>(copy_info&vrtri;{book?})&subeq;available)
 (reservelist(book?))&frown;&lang;user?&rang;= reservelist'(book?)</schema-box></textItem
-><textItem location="gui::39"><schema-box location="gui::39">REMIND<decl-part/>            &Delta;LIB
+><textItem location="gui::39" history="26"><schema-box location="gui::39">REMIND<decl-part/>              &Delta;LIB
 time?: &Nopf;
-overtimelist!:<word style="roman"/>seq<word/>(USER&cross;<word style="roman"/>seq<word/> COPY)<ax-part/>           <word style="roman"/>dom<word/>( <word style="roman"/>ran<word/>overtimelist!)&subeq;(administrators&cup;customers)
-&exists; copy:<word style="roman"/>ran<word/>(<word style="roman"/>ran<word/>(<word style="roman"/>ran<word/> overtimelist!) )&bullet; borrow_time copy - time? &lt; TIME_TO_REMIND</schema-box></textItem
+overtimelist!:<word style="roman"/>seq<word/>(COPY)<ax-part/> &exists; copy:(<word style="roman"/>ran<word/> overtimelist!) &bullet; borrow_time copy - time? &lt; TIME_TO_REMIND</schema-box></textItem
+><textItem location="gui::40" history="27"><schema-box location="gui::40"> SEARCH_BY_AUTHOR <decl-part/> &Delta;LIB
+author?:AUTHOR
+result!:<word style="roman"/>seq<word/>BOOK<ax-part/> &exists;book:<word style="roman"/>ran<word/>result!&bullet;author?&isin;book.authors</schema-box></textItem
+><textItem location="gui::41" history="28"><schema-box location="gui::41"> SEARCH_BY_TITLE <decl-part/>&Delta;LIB
+title?:TITLE
+result!:<word style="roman"/>seq<word/>BOOK<ax-part/>&exists;book:<word style="roman"/>ran<word/>result!&bullet;book.title=title?</schema-box></textItem
+><textItem location="gui::42" history="29"><schema-box location="gui::42"> SEARCH_BY_ID <decl-part/>  &Delta;LIB
+id?:&Nopf;
+result!:<word style="roman"/>seq<word/>BOOK<ax-part/>  &exists;book:<word style="roman"/>ran<word/>result!&bullet;book.bookid=id?</schema-box></textItem
+><textItem location="gui::43" history="30"><schema-box location="gui::43">SEARCH_BY_TIME<decl-part/> &Delta;LIB
+year?: &Nopf;
+result!: <word style="roman"/>seq<word/> BOOK</schema-box></textItem
 ><script name="FINE$domainCheck"></script
-><script name="RESERVE$domainCheck"></script
+><script name="REMIND$domainCheck"></script
+><script name="RESERVE$domainCheck"><scriptItem number="2"><ztext>prove by reduce</ztext></scriptItem
+></script
 ><script name="BORROW$domainCheck"><scriptItem><ztext>next</ztext></scriptItem
 ><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
 ><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
