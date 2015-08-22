@@ -138,21 +138,56 @@ allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::39" history="26"><schema-box location="gui::39">REMIND<decl-part/>              &Delta;LIB
+><textItem location="gui::39" history="26"><schema-box location="gui::39">REMIND<decl-part/> &Delta;LIB
 time?: &Nopf;
-overtimelist!:<word style="roman"/>seq<word/>(COPY)<ax-part/> &exists; copy:(<word style="roman"/>ran<word/> overtimelist!) &bullet; borrow_time copy - time? &lt; TIME_TO_REMIND</schema-box></textItem
-><textItem location="gui::40" history="27"><schema-box location="gui::40"> SEARCH_BY_AUTHOR <decl-part/> &Delta;LIB
-author?:AUTHOR
-result!:<word style="roman"/>seq<word/>BOOK<ax-part/> &exists;book:<word style="roman"/>ran<word/>result!&bullet;author?&isin;book.authors</schema-box></textItem
-><textItem location="gui::41" history="28"><schema-box location="gui::41"> SEARCH_BY_TITLE <decl-part/>&Delta;LIB
-title?:TITLE
-result!:<word style="roman"/>seq<word/>BOOK<ax-part/>&exists;book:<word style="roman"/>ran<word/>result!&bullet;book.title=title?</schema-box></textItem
-><textItem location="gui::42" history="29"><schema-box location="gui::42"> SEARCH_BY_ID <decl-part/>  &Delta;LIB
-id?:&Nopf;
-result!:<word style="roman"/>seq<word/>BOOK<ax-part/>  &exists;book:<word style="roman"/>ran<word/>result!&bullet;book.bookid=id?</schema-box></textItem
+overtimelist!: &Popf; COPY<ax-part/> &exists; copy: overtimelist! &bullet; borrow_time copy - time? &lt; TIME_TO_REMIND
+administrators' = administrators'
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time</schema-box></textItem
+><textItem location="gui::40" history="27"><schema-box location="gui::40">SEARCH_BY_AUTHOR<decl-part/>  &Delta;LIB
+author?: AUTHOR
+result!: &Popf; BOOK<ax-part/>  &exists; book: result! &bullet; author? &isin; book.authors
+administrators' = administrators'
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time</schema-box></textItem
+><textItem location="gui::41" history="28"><schema-box location="gui::41">SEARCH_BY_TITLE<decl-part/> &Delta;LIB
+title?: TITLE
+result!: &Popf;BOOK<ax-part/> &exists; book: result! &bullet; book.title = title?
+administrators' = administrators'
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time</schema-box></textItem
+><textItem location="gui::42" history="29"><schema-box location="gui::42">SEARCH_BY_ID<decl-part/> &Delta;LIB
+id?: &Nopf;
+result!: &Popf; BOOK<ax-part/> &exists; book: result! &bullet; book.bookid = id?
+administrators' = administrators'
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time</schema-box></textItem
 ><textItem location="gui::43" history="30"><schema-box location="gui::43">SEARCH_BY_TIME<decl-part/> &Delta;LIB
 year?: &Nopf;
-result!: <word style="roman"/>seq<word/> BOOK</schema-box></textItem
+result!: &Popf; BOOK<ax-part/> &exists; book: result! &bullet; book.year = year?
+administrators' = administrators'
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time</schema-box></textItem
 ><script name="FINE$domainCheck"></script
 ><script name="REMIND$domainCheck"></script
 ><script name="RESERVE$domainCheck"><scriptItem number="2"><ztext>prove by reduce</ztext></scriptItem
