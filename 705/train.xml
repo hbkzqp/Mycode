@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+const int N = 6;//no train
+typedef int[0, N-1] trainId;//Generate Train Id
+
+chan appr[N],leave[N];//Sync channels
+urgent chan go[N],stop[N];//Urgent channels are used to 
+//take actions as soon as possible. Time does not
+//progress in urgent actions</declaration>
+	<template>
+		<name x="5" y="5">Train</name>
+		<parameter>const trainId myId</parameter>
+		<declaration>// Place local declarations here.
+clock x;</declaration>
+		<location id="id0" x="-517" y="-68">
+			<name x="-518" y="-51">Stop</name>
+		</location>
+		<location id="id1" x="-399" y="-170">
+			<name x="-409" y="-204">Start</name>
+			<label kind="invariant" x="-382" y="-187">x&lt;=15</label>
+		</location>
+		<location id="id2" x="-603" y="-170">
+			<name x="-672" y="-195">Appr</name>
+			<label kind="invariant" x="-663" y="-170">x&lt;=20</label>
+		</location>
+		<location id="id3" x="-398" y="-297">
+			<name x="-408" y="-331">Cross</name>
+			<label kind="invariant" x="-382" y="-306">x&lt;=5</label>
+		</location>
+		<location id="id4" x="-603" y="-289">
+			<name x="-613" y="-323">Safe</name>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-629" y="-119">stop[myId]?</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="synchronisation" x="-680" y="-255">appr[myId]!</label>
+			<label kind="assignment" x="-680" y="-238">x=0</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-551" y="-327">x&gt;=3</label>
+			<label kind="synchronisation" x="-551" y="-310">leave[myId]!</label>
+			<nail x="-569" y="-289"/>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-501" y="-221">x&gt;=10</label>
+			<label kind="assignment" x="-501" y="-187">x=0</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-357" y="-263">x&gt;=7</label>
+			<label kind="assignment" x="-357" y="-229">x=0</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-442" y="-110">go[myId]?</label>
+			<label kind="assignment" x="-442" y="-93">x=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Gate</name>
+		<declaration>trainId list[N+1];//Collection to use for queue
+int[0,N] len;//Length of queue
+
+//Put an element at the end of the queue
+void enqueue(trainId element)
+{
+        list[len++] = element;
+}
+
+//Remove the front element of the queue
+void dequeue()
+{
+        int i = 0;
+        len-=1;
+        while(i&lt;len)
+        {
+                list[i] = list[i+1];
+                i++;
+        }
+        list[i] = 0;
+}
+
+//Returns the front element of the queue
+trainId front()
+{
+    return list[0];
+}
+
+//Returns the last element of the queue
+trainId tail()
+{
+    return list[len-1];
+}</declaration>
+		<location id="id5" x="0" y="144">
+		</location>
+		<location id="id6" x="0" y="-119">
+			<name x="-10" y="-153">Free</name>
+		</location>
+		<location id="id7" x="0" y="0">
+			<name x="-10" y="-34">Occ</name>
+		</location>
+		<init ref="id6"/>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="-127" y="-76">len&gt;0</label>
+			<label kind="synchronisation" x="-127" y="-59">go[front()]!</label>
+			<nail x="-137" y="-119"/>
+			<nail x="-137" y="-8"/>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="select" x="0" y="-110">e : trainId</label>
+			<label kind="guard" x="0" y="-93">len == 0</label>
+			<label kind="synchronisation" x="0" y="-76">appr[e]?</label>
+			<label kind="assignment" x="0" y="-59">enqueue(e)</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="select" x="119" y="-51">e : trainId</label>
+			<label kind="guard" x="119" y="-34">e==front()</label>
+			<label kind="synchronisation" x="119" y="-17">leave[e]?</label>
+			<label kind="assignment" x="119" y="0">dequeue()</label>
+			<nail x="245" y="0"/>
+			<nail x="245" y="-127"/>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id5"/>
+			<label kind="select" x="0" y="21">e : trainId</label>
+			<label kind="synchronisation" x="0" y="55">appr[e]?</label>
+			<label kind="assignment" x="0" y="72">enqueue(e)</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="76" y="59">stop[tail()]!</label>
+			<nail x="68" y="68"/>
+		</transition>
+	</template>
+	<system>
+// List one or more processes to be composed into a system.
+system Train, Gate;
+    </system>
+	<queries>
+		<query>
+			<formula>A[] Gate.len &gt;=0
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] Gate.list[N] == 0
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt;Train(0).Cross &amp;&amp; Train(1).Stop
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Train(0).Safe
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] Train(0).Cross+Train(1).Cross+Train(2).Cross+Train(3).Cross+Train(4).Cross+Train(5).Cross&lt;=1
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Train(0).Cross and forall(i:int[1,5]) not Train(i).Cross
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>Train(0).Cross--&gt; forall(i: int [1,5]) not Train(i).Cross
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>Train(0).Appr --&gt; Train(0).Cross
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt;Train(2).Cross
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>A[] not deadlock
+			</formula>
+			<comment>
+			</comment>
+		</query>
+		<query>
+			<formula>forall(i:int[0,5]) Train(i).Appr--&gt; forall(i:int[0,5]) Train(i).Cross
+			</formula>
+			<comment>3
+			</comment>
+		</query>
+	</queries>
+</nta>
