@@ -1,0 +1,396 @@
+\begin{axdef}
+  MAXTIME: \nat 
+\end{axdef}
+
+\begin{axdef}
+  MAXCONTINUEDAYS: \nat 
+\end{axdef}
+
+\begin{axdef}
+  FINE\_EVERYDAY: \nat 
+\end{axdef}
+
+\begin{axdef}
+  MAXNUMBER: \nat 
+\end{axdef}
+
+\begin{axdef}
+  TIME\_TO\_REMIND: \nat 
+\end{axdef}
+
+\begin{zed}
+  [TIME]
+\end{zed}
+
+\begin{zed}
+  [COPY]
+\end{zed}
+
+\begin{zed}
+  [USER]
+\end{zed}
+
+\begin{zed}
+  [AUTHOR]
+\end{zed}
+
+\begin{zed}
+  [SUBJECT]
+\end{zed}
+
+\begin{zed}
+  [TITLE]
+\end{zed}
+
+\begin{schema}{BOOK}
+  bookid: \nat \\
+  authors: \power  AUTHOR\\
+  title: TITLE\\
+  year: \nat \\
+  subjects: \power  SUBJECT
+\end{schema}
+
+\begin{schema}{USERS}
+  administrators: \power  USER\\
+  customers: \power  USER
+\where
+  administrators \cap  customers = \emptyset
+\end{schema}
+
+\begin{schema}{BOOKSTORE}
+  available: \power  COPY\\
+  allbooks: \power  COPY\\
+  belonging: COPY \pfun  USER\\
+  copy\_info: COPY \pfun  BOOK\\
+  borrow\_time: COPY \pfun  \nat \\
+  reservelist: BOOK \pfun  \seq  USER\\
+  continue\_borrowing: \power  COPY
+\where
+  \dom  belonging \cup  available = allbooks\\
+  \dom  copy\_info = allbooks\\
+  available \subseteq  allbooks\\
+  \dom  borrow\_time \cup  available = allbooks
+\end{schema}
+
+\begin{schema}{LIB}
+  BOOKSTORE\\
+  USERS
+\where
+  \ran  belonging \subseteq  administrators \cup  customers\\
+  \forall  users: \ran  reservelist @ \ran  users \subseteq  administrators \cup  customers
+\end{schema}
+
+\begin{schema}{LIBInit}
+  LIB
+\where
+  administrators = \emptyset\\
+  customers = \emptyset\\
+  available = \emptyset\\
+  allbooks = \emptyset\\
+  belonging = \emptyset\\
+  copy\_info = \emptyset\\
+  borrow\_time = \emptyset\\
+  reservelist = \emptyset\\
+  continue\_borrowing = \emptyset
+\end{schema}
+
+\begin{schema}{AdministratorProcess}
+  \Delta LIB\\
+  person?: USER
+\where
+  person? \in  administrators
+\end{schema}
+
+\begin{schema}{UserProcess}
+  \Delta LIB\\
+  person?: USER
+\where
+  person? \in  administrators \cup  customers
+\end{schema}
+
+\begin{schema}{BORROW}
+  UserProcess\\
+  borrowuser?: USER\\
+  book?: COPY\\
+  time?: \nat 
+\where
+  book? \in  available\\
+  borrowuser? \in  administrators \cup  customers\\
+  \# (belonging \rres  \{borrowuser?\}) < MAXNUMBER\\
+  book? \notin  \dom  belonging\\
+  copy\_info book? \notin  \dom  reservelist\\
+  allbooks' = allbooks\\
+  available' \cup  \{book?\} = available\\
+  copy\_info' = copy\_info\\
+  belonging' = belonging \cup  \{(book? \mapsto  borrowuser?)\}\\
+  borrow\_time' = borrow\_time \cup  \{(book? \mapsto  time?)\}\\
+  reservelist' = reservelist\\
+  continue\_borrowing' = continue\_borrowing\\
+  administrators' = administrators\\
+  customers' = customers
+\end{schema}
+
+\begin{zproof}[BORROW\$domainCheck]
+next;
+prove;
+prove;
+prove;
+prove;
+next;
+next;
+next;
+next;
+prove;
+prove;
+prove;
+prove;
+prove;
+prove;
+prove;
+prove;
+prove;
+prove;
+prove;
+prove;
+prove by reduce;
+prove;
+\end{zproof}
+
+\begin{schema}{RETURN}
+  UserProcess\\
+  book?: COPY\\
+  user?: USER\\
+  time?: \nat \\
+  fine!: \nat 
+\where
+  administrators' = administrators\\
+  customers' = customers\\
+  book? \notin  available\\
+  book? \in  allbooks\\
+  user? \in  administrators \cup  customers\\
+  allbooks' = allbooks\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time\\
+  reservelist (copy\_info book?) = \langle \rangle  \implies  reservelist' = reservelist \land  available' \cup  \{book?\} = available \land  belonging' \cup  \{(book? \mapsto  user?)\} = belonging\\
+  \lnot  reservelist (copy\_info book?) = \langle \rangle  \implies  available' = available \land  belonging' = belonging \oplus  \{(book? \mapsto  head (reservelist (copy\_info book?)))\} \land  reservelist' = reservelist \oplus  \{(copy\_info book? \mapsto  tail (reservelist (copy\_info book?)))\}\\
+  continue\_borrowing' = continue\_borrowing\\
+  time? > borrow\_time book? + MAXTIME \implies  fine! = FINE\_EVERYDAY * (time? - borrow\_time book? - MAXTIME)\\
+  time? \leq  borrow\_time book? + MAXTIME \implies  fine! = 0
+\end{schema}
+
+\begin{schema}{ADDBOOK}
+  AdministratorProcess\\
+  copy?: COPY\\
+  book?: BOOK
+\where
+  copy? \notin  allbooks\\
+  copy\_info' = copy\_info \cup  \{(copy? \mapsto  book?)\}\\
+  available' = available \cup  \{copy?\}\\
+  allbooks' = allbooks \cup  \{copy?\}\\
+  belonging' = belonging\\
+  borrow\_time' = borrow\_time\\
+  reservelist' = reservelist\\
+  continue\_borrowing' = continue\_borrowing\\
+  administrators' = administrators\\
+  customers' = customers
+\end{schema}
+
+\begin{schema}{REMOVEBOOK}
+  AdministratorProcess\\
+  copy?: COPY
+\where
+  copy? \in  available\\
+  allbooks' \cup  \{copy?\} = allbooks\\
+  available' \cup  \{copy?\} = available\\
+  administrators' = administrators\\
+  customers' = customers\\
+  belonging' = belonging\\
+  copy\_info' = \{copy?\} \ndres  copy\_info\\
+  borrow\_time = borrow\_time'\\
+  reservelist' = reservelist\\
+  continue\_borrowing' = continue\_borrowing
+\end{schema}
+
+\begin{schema}{ADDCUSTOMER}
+  AdministratorProcess\\
+  customer?: USER
+\where
+  customer? \notin  customers \cup  administrators\\
+  customers' = customers \cup  \{customer?\}\\
+  administrators' = administrators\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging = belonging'\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time\\
+  reservelist' = reservelist\\
+  continue\_borrowing' = continue\_borrowing
+\end{schema}
+
+\begin{schema}{REMOVECUSTOMER}
+  AdministratorProcess\\
+  customer?: USER
+\where
+  customer? \in  customers'\\
+  customers' \cup  \{customer?\} = customers\\
+  administrators' = administrators\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time\\
+  reservelist' = reservelist\\
+  continue\_borrowing' = continue\_borrowing
+\end{schema}
+
+\begin{schema}{ADDADMINISTRTOR}
+  AdministratorProcess\\
+  administrator?: USER
+\where
+  administrator? \notin  administrators \cup  customers\\
+  administrators' = administrators \cup  \{administrator?\}\\
+  customers' = customers\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time\\
+  reservelist' = reservelist\\
+  continue\_borrowing' = continue\_borrowing
+\end{schema}
+
+\begin{schema}{REMOVEADMINISTRATOR}
+  AdministratorProcess\\
+  administrator?: USER
+\where
+  administrator? \notin  administrators\\
+  administrators' = administrators \cup  \{administrator?\}\\
+  administrator? \notin  customers'\\
+  customers' = customers\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time\\
+  continue\_borrowing' = continue\_borrowing
+\end{schema}
+
+\begin{schema}{RESERVE}
+  UserProcess\\
+  book?: BOOK\\
+  user?: USER
+\where
+  \lnot  \dom  (copy\_info \rres  \{book?\}) \subseteq  available\\
+  reservelist book? \cup  \langle user?\rangle  = reservelist' book?\\
+  administrators' = administrators'\\
+  customers' = customers\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time\\
+  continue\_borrowing' = continue\_borrowing
+\end{schema}
+
+\begin{zproof}[RESERVE\$domainCheck]
+prove by reduce;
+\end{zproof}
+
+\begin{schema}{REMIND}
+  AdministratorProcess\\
+  time?: \nat \\
+  overtimelist!: \power  COPY
+\where
+  \forall  copy: overtimelist! @ borrow\_time copy - time? < TIME\_TO\_REMIND\\
+  administrators' = administrators'\\
+  customers' = customers\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time
+\end{schema}
+
+\begin{schema}{SEARCH\_BY\_AUTHOR}
+  UserProcess\\
+  author?: AUTHOR\\
+  result!: \power  BOOK
+\where
+  \forall  book: result! @ author? \in  book.authors\\
+  administrators' = administrators'\\
+  customers' = customers\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time
+\end{schema}
+
+\begin{schema}{SEARCH\_BY\_TITLE}
+  UserProcess\\
+  title?: TITLE\\
+  result!: \power  BOOK
+\where
+  \forall  book: result! @ book.title = title?\\
+  administrators' = administrators'\\
+  customers' = customers\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time
+\end{schema}
+
+\begin{schema}{SEARCH\_BY\_ID}
+  UserProcess\\
+  bookid?: \nat \\
+  result!: \power  BOOK
+\where
+  \forall  book: result! @ book.bookid = bookid?\\
+  administrators' = administrators'\\
+  customers' = customers\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time
+\end{schema}
+
+\begin{schema}{SEARCH\_BY\_TIME}
+  UserProcess\\
+  year?: \nat \\
+  result!: \power  BOOK
+\where
+  \forall  book: result! @ book.year = year?\\
+  administrators' = administrators'\\
+  customers' = customers\\
+  available' = available\\
+  allbooks' = allbooks\\
+  belonging' = belonging\\
+  copy\_info' = copy\_info\\
+  borrow\_time' = borrow\_time
+\end{schema}
+
+\begin{schema}{ContinueBorrow}
+  UserProcess\\
+  book?: COPY\\
+  time?: \nat 
+\where
+  book? \in  allbooks \setminus  available\\
+  book? \notin  continue\_borrowing\\
+  time? > borrow\_time book? + MAXTIME - MAXCONTINUEDAYS\\
+  time? \leq  borrow\_time book? + MAXTIME\\
+  belonging book? = id?\\
+  borrow\_time' = borrow\_time \oplus  \{(book? \mapsto  time?)\}\\
+  continue\_borrowing' = continue\_borrowing \cup  \{book?\}
+\end{schema}
+
+\begin{schema}{CancelReserve}
+  UserProcess\\
+  book?: BOOK
+\where
+  book? \in  \dom  reservelist\\
+  id? \in  \ran  (reservelist book?)\\
+  reservelist' = reservelist \oplus  \{(book? \mapsto  squash (reservelist book? \nrres  \{id?\}))\}
+\end{schema}
+

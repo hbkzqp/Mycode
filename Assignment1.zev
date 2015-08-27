@@ -1,20 +1,19 @@
-<Z-EVES-GUI-State version="1" index="50"><textItem location="gui::8" history="2"><zed-box location="gui::8">[SUBJECT]</zed-box></textItem
-><textItem location="gui::38" history="3"><axiomatic-box location="gui::38"><decl-part/>TIME_TO_REMIND: &Nopf;</axiomatic-box></textItem
-><textItem location="gui::9" history="4"><zed-box location="gui::9">[TIME]</zed-box></textItem
-><textItem location="gui::20" history="5"><zed-box location="gui::20">[COPY]</zed-box></textItem
-><textItem location="gui::26" history="6"><axiomatic-box location="gui::26"><decl-part/>MAXTIME:&Nopf;</axiomatic-box></textItem
-><textItem location="gui::49" history="7"><axiomatic-box location="gui::49"><decl-part/>MAXCONTINUEDAYS:&Nopf;</axiomatic-box></textItem
-><textItem location="gui::11" history="8"><axiomatic-box location="gui::11"><decl-part/>FINE_EVERYDAY: &Nopf;</axiomatic-box></textItem
-><textItem location="gui::1" history="9"><axiomatic-box location="gui::1"><decl-part/>MAXNUMBER: &Nopf;</axiomatic-box></textItem
-><textItem location="gui::2" history="10"><zed-box location="gui::2">[USER]</zed-box></textItem
-><textItem location="gui::3" history="11"><zed-box location="gui::3">[AUTHOR]</zed-box></textItem
+<Z-EVES-GUI-State version="1" index="52"><textItem location="gui::26" history="2"><axiomatic-box location="gui::26"><decl-part/>MAXTIME:&Nopf;</axiomatic-box></textItem
+><textItem location="gui::49" history="3"><axiomatic-box location="gui::49"><decl-part/>MAXCONTINUEDAYS:&Nopf;</axiomatic-box></textItem
+><textItem location="gui::11" history="4"><axiomatic-box location="gui::11"><decl-part/>FINE_EVERYDAY: &Nopf;</axiomatic-box></textItem
+><textItem location="gui::1" history="5"><axiomatic-box location="gui::1"><decl-part/>MAXNUMBER: &Nopf;</axiomatic-box></textItem
+><textItem location="gui::38" history="6"><axiomatic-box location="gui::38"><decl-part/>TIME_TO_REMIND: &Nopf;</axiomatic-box></textItem
+><textItem location="gui::9" history="7"><zed-box location="gui::9">[TIME]</zed-box></textItem
+><textItem location="gui::20" history="8"><zed-box location="gui::20">[COPY]</zed-box></textItem
+><textItem location="gui::2" history="9"><zed-box location="gui::2">[USER]</zed-box></textItem
+><textItem location="gui::3" history="10"><zed-box location="gui::3">[AUTHOR]</zed-box></textItem
+><textItem location="gui::8" history="11"><zed-box location="gui::8">[SUBJECT]</zed-box></textItem
 ><textItem location="gui::4" history="12"><zed-box location="gui::4">[TITLE]</zed-box></textItem
 ><textItem location="gui::7" history="13"><schema-box location="gui::7">BOOK<decl-part/> bookid: &Nopf;
 authors: &Popf; AUTHOR
 title: TITLE
 year: &Nopf;
-subjects: &Popf; SUBJECT
-wait_list: <word style="roman"/>seq<word/> USER</schema-box></textItem
+subjects: &Popf; SUBJECT</schema-box></textItem
 ><textItem location="gui::12" history="14"><schema-box location="gui::12">USERS<decl-part/>    administrators: &Popf; USER
 customers:&Popf; USER<ax-part/>   administrators&cap;customers=&empty;</schema-box></textItem
 ><textItem location="gui::16" history="15"><schema-box location="gui::16">BOOKSTORE<decl-part/> available: &Popf; COPY
@@ -30,11 +29,20 @@ available &subeq; allbooks
 ><textItem location="gui::17" history="16"><schema-box location="gui::17">LIB<decl-part/>        BOOKSTORE
 USERS<ax-part/>        <word style="roman"/>ran<word/> belonging &subeq; administrators &cup; customers
 &forall;users: ((<word style="roman"/>ran<word/> reservelist))&bullet; <word style="roman"/>ran<word/> users &subeq; administrators &cup; customers</schema-box></textItem
-><textItem location="gui::45" history="17"><schema-box location="gui::45"> AdministratorProcess <decl-part/> &Delta;LIB
-id?:USER<ax-part/> id?&isin;administrators</schema-box></textItem
-><textItem location="gui::46" history="18"><schema-box location="gui::46">  UserProcess<decl-part/> &Delta;LIB
-id?:USER<ax-part/> id?&isin;administrators&cup;customers</schema-box></textItem
-><textItem location="gui::18" history="19"><schema-box location="gui::18">BORROW<decl-part/> UserProcess
+><textItem location="gui::52" history="17"><schema-box location="gui::52">  LIBInit<decl-part/> LIB<ax-part/> administrators=&empty;
+customers=&empty;
+available=&empty;
+allbooks=&empty;
+belonging=&empty;
+copy_info=&empty;
+borrow_time=&empty;
+reservelist=&empty;
+continue_borrowing=&empty;</schema-box></textItem
+><textItem location="gui::45" history="18"><schema-box location="gui::45">AdministratorProcess<decl-part/> &Delta;LIB
+person?: USER<ax-part/> person? &isin; administrators</schema-box></textItem
+><textItem location="gui::46" history="19"><schema-box location="gui::46">UserProcess<decl-part/>  &Delta;LIB
+person?: USER<ax-part/>  person? &isin; administrators &cup; customers</schema-box></textItem
+><textItem location="gui::18" history="20"><schema-box location="gui::18">BORROW<decl-part/> UserProcess
 borrowuser?: USER
 book?: COPY
 time?: &Nopf;<ax-part/> book? &isin; available
@@ -48,34 +56,27 @@ copy_info' = copy_info
 belonging' = belonging &cup; {(book? &rtarr; borrowuser?)}
 borrow_time' = borrow_time &cup; {(book? &rtarr; time?)}
 reservelist' = reservelist
+continue_borrowing'=continue_borrowing
 administrators' = administrators
 customers' = customers</schema-box></textItem
-><textItem location="gui::24" history="20"><schema-box location="gui::24">RETURN<decl-part/> UserProcess
+><textItem location="gui::24" history="21"><schema-box location="gui::24">RETURN<decl-part/>             UserProcess
 book?: COPY
 user?: USER
 time?: &Nopf;
-fine!: &Nopf;<ax-part/> administrators' = administrators
+fine!: &Nopf;<ax-part/>             administrators' = administrators
 customers' = customers
 book? &notin; available
 book? &isin; allbooks
 user? &isin; administrators &cup; customers
-available' &cup; {book?} = available
 allbooks' = allbooks
-belonging' &cup; {(book? &rtarr; user?)} = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time
-reservelist' = reservelist
+(reservelist(copy_info(book?)))=&lang;&rang;&rArr;reservelist'=reservelist&wedge;available' &cup; {book?} = available&wedge;belonging' &cup; {(book? &rtarr; user?)} = belonging
+&not;(reservelist(copy_info(book?)))=&lang;&rang;&rArr;available'=available&wedge;belonging'=belonging&oplus;{book?&rtarr;head(reservelist(copy_info(book?))) }&wedge;reservelist'=reservelist&oplus;{copy_info(book?)&rtarr;tail(reservelist(copy_info(book?)))}
+continue_borrowing' = continue_borrowing
 time? &gt; borrow_time book? + MAXTIME
-&rArr; fine! = FINE_EVERYDAY * (time? - borrow_time book?-MAXTIME)
-time? &leq; borrow_time book? + MAXTIME&rArr;fine!=0</schema-box></textItem
-><textItem location="gui::27" history="21"><schema-box location="gui::27">FINE<decl-part/> &Xi;LIB
-book?: COPY
-time?: &Nopf;
-fine!: &Nopf;<ax-part/>book?&isin;allbooks
-book?&notin;available
-time? &gt; borrow_time book?
-
-fine! = FINE_EVERYDAY * (time? - borrow_time book?)</schema-box></textItem
+&rArr; fine! = FINE_EVERYDAY * (time? - borrow_time book? - MAXTIME)
+time? &leq; borrow_time book? + MAXTIME &rArr; fine! = 0</schema-box></textItem
 ><textItem location="gui::28" history="22"><schema-box location="gui::28">ADDBOOK<decl-part/> AdministratorProcess
 copy?: COPY
 book?: BOOK<ax-part/> copy? &notin; allbooks
@@ -85,18 +86,20 @@ allbooks' = allbooks &cup; {copy?}
 belonging' = belonging
 borrow_time' = borrow_time
 reservelist' = reservelist
+continue_borrowing'=continue_borrowing
 administrators' = administrators
 customers' = customers</schema-box></textItem
-><textItem location="gui::29" history="23"><schema-box location="gui::29">REMOVEBOOK<decl-part/> AdministratorProcess
-copy?: COPY<ax-part/> copy? &isin; available
+><textItem location="gui::29" history="23"><schema-box location="gui::29">REMOVEBOOK<decl-part/>  AdministratorProcess
+copy?: COPY<ax-part/>  copy? &isin; available
 allbooks' &cup; {copy?} = allbooks
 available' &cup; {copy?} = available
 administrators' = administrators
 customers' = customers
 belonging' = belonging
-<word style="roman"/>dom<word/> copy_info' = <word style="roman"/>dom<word/> copy_info &cup; {copy?}
+copy_info'={copy?}&vltrib;copy_info
 borrow_time = borrow_time'
-reservelist' = reservelist</schema-box></textItem
+reservelist' = reservelist
+continue_borrowing' = continue_borrowing</schema-box></textItem
 ><textItem location="gui::30" history="24"><schema-box location="gui::30">ADDCUSTOMER<decl-part/> AdministratorProcess
 customer?: USER<ax-part/> customer? &notin; customers &cup; administrators
 customers' = customers &cup; {customer?}
@@ -106,7 +109,8 @@ allbooks' = allbooks
 belonging = belonging'
 copy_info' = copy_info
 borrow_time' = borrow_time
-reservelist' = reservelist</schema-box></textItem
+reservelist' = reservelist
+continue_borrowing'=continue_borrowing</schema-box></textItem
 ><textItem location="gui::32" history="25"><schema-box location="gui::32">REMOVECUSTOMER<decl-part/> AdministratorProcess
 customer?: USER<ax-part/> customer? &isin; customers'
 customers' &cup; {customer?} = customers
@@ -116,7 +120,8 @@ allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time
-reservelist' = reservelist</schema-box></textItem
+reservelist' = reservelist
+continue_borrowing'=continue_borrowing</schema-box></textItem
 ><textItem location="gui::33" history="26"><schema-box location="gui::33">ADDADMINISTRTOR<decl-part/> AdministratorProcess
 administrator?: USER<ax-part/> administrator? &notin; administrators &cup; customers
 administrators' = administrators &cup; {administrator?}
@@ -126,7 +131,8 @@ allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time
-reservelist' = reservelist</schema-box></textItem
+reservelist' = reservelist
+continue_borrowing'=continue_borrowing</schema-box></textItem
 ><textItem location="gui::34" history="27"><schema-box location="gui::34">REMOVEADMINISTRATOR<decl-part/> AdministratorProcess
 administrator?: USER<ax-part/> administrator? &notin; administrators
 administrators' = administrators &cup; {administrator?}
@@ -136,19 +142,21 @@ available' = available
 allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
-borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::36"><schema-box location="gui::36">RESERVE<decl-part/> UserProcess
+borrow_time' = borrow_time
+continue_borrowing'=continue_borrowing</schema-box></textItem
+><textItem location="gui::36" history="28"><schema-box location="gui::36">RESERVE<decl-part/> UserProcess
 book?: BOOK
 user?: USER<ax-part/> &not; <word style="roman"/>dom<word/> (copy_info &vrtri; {book?}) &subeq; available
-reservelist book? &cup; {user?} = reservelist' book?
+reservelist book? &cup; &lang;user?&rang; = reservelist' book?
 administrators' = administrators'
 customers' = customers
 available' = available
 allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
-borrow_time' = borrow_time</schema-box><schemadef><schname ident="RESERVE" kind="schema"></schname><decpart><schname ident="UserProcess" kind="schema"></schname><decl><namelist><name ident="book?" kind="expr"></name></namelist><name ident="BOOK" kind="expr"></name></decl><decl><namelist><name ident="user?" kind="expr"></name></namelist><name ident="USER" kind="expr"></name></decl></decpart><axpart><op kind="pred" type="preop"><name ident="&not;" class="other" kind="expr"></name><relchain><application><name style="roman" ident="dom" kind="expr"></name><parenform kind="expr"><op kind="expr" type="inop"><name ident="&vrtri;" class="infun" kind="expr"></name><name ident="copy_info" kind="expr"></name><display type="set"><name ident="book?" kind="expr"></name></display></op></parenform></application><name ident="&subeq;" class="inrel" kind="expr"></name><name ident="available" kind="expr"></name></relchain></op><relchain><op kind="expr" type="inop"><name ident="&cup;" class="infun" kind="expr"></name><application><name ident="reservelist" kind="expr"></name><name ident="book?" kind="expr"></name></application><display type="set"><name ident="user?" kind="expr"></name></display></op><name ident="=" class="inrel" kind="expr"></name><application><name ident="reservelist'" kind="expr"></name><name ident="book?" kind="expr"></name></application></relchain><relchain><name ident="administrators'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><name ident="administrators'" kind="expr"></name></relchain><relchain><name ident="customers'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><name ident="customers" kind="expr"></name></relchain><relchain><name ident="available'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><name ident="available" kind="expr"></name></relchain><relchain><name ident="allbooks'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><name ident="allbooks" kind="expr"></name></relchain><relchain><name ident="belonging'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><name ident="belonging" kind="expr"></name></relchain><relchain><name ident="copy_info'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><name ident="copy_info" kind="expr"></name></relchain><relchain><name ident="borrow_time'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><name ident="borrow_time" kind="expr"></name></relchain></axpart></schemadef></textItem
-><textItem location="gui::39" history="28"><schema-box location="gui::39">REMIND<decl-part/>  AdministratorProcess
+borrow_time' = borrow_time
+continue_borrowing'=continue_borrowing</schema-box></textItem
+><textItem location="gui::39" history="29"><schema-box location="gui::39">REMIND<decl-part/>  AdministratorProcess
 time?: &Nopf;
 overtimelist!: &Popf; COPY<ax-part/>  &forall; copy: overtimelist! &bullet; borrow_time copy - time? &lt; TIME_TO_REMIND
 administrators' = administrators'
@@ -158,7 +166,7 @@ allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::40" history="29"><schema-box location="gui::40">SEARCH_BY_AUTHOR<decl-part/> UserProcess
+><textItem location="gui::40" history="30"><schema-box location="gui::40">SEARCH_BY_AUTHOR<decl-part/> UserProcess
 author?: AUTHOR
 result!: &Popf; BOOK<ax-part/> &forall; book: result! &bullet; author? &isin; book.authors
 administrators' = administrators'
@@ -168,7 +176,7 @@ allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::41" history="30"><schema-box location="gui::41">SEARCH_BY_TITLE<decl-part/> UserProcess
+><textItem location="gui::41" history="31"><schema-box location="gui::41">SEARCH_BY_TITLE<decl-part/> UserProcess
 title?: TITLE
 result!: &Popf; BOOK<ax-part/> &forall; book: result! &bullet; book.title = title?
 administrators' = administrators'
@@ -178,7 +186,7 @@ allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::42" history="31"><schema-box location="gui::42">SEARCH_BY_ID<decl-part/>  UserProcess
+><textItem location="gui::42" history="32"><schema-box location="gui::42">SEARCH_BY_ID<decl-part/>  UserProcess
 bookid?: &Nopf;
 result!: &Popf; BOOK<ax-part/>  &forall; book: result! &bullet; book.bookid = bookid?
 administrators' = administrators'
@@ -188,7 +196,7 @@ allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::43" history="32"><schema-box location="gui::43">SEARCH_BY_TIME<decl-part/> UserProcess
+><textItem location="gui::43" history="33"><schema-box location="gui::43">SEARCH_BY_TIME<decl-part/> UserProcess
 year?: &Nopf;
 result!: &Popf; BOOK<ax-part/> &forall; book: result! &bullet; book.year = year?
 administrators' = administrators'
@@ -198,7 +206,7 @@ allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
 borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::48" history="33"><schema-box location="gui::48">ContinueBorrow<decl-part/> UserProcess
+><textItem location="gui::48"><schema-box location="gui::48">ContinueBorrow<decl-part/> UserProcess
 book?: COPY
 time?: &Nopf;<ax-part/> book? &isin; allbooks \ available
 book?&notin;continue_borrowing
@@ -207,16 +215,18 @@ time? &leq; borrow_time book? + MAXTIME
 belonging book? = id?
 borrow_time' = borrow_time &oplus; {(book? &rtarr; time?)}
 continue_borrowing'=continue_borrowing&cup;{book?}
-</schema-box></textItem
-><textItem location="gui::50"><schema-box location="gui::50"> CancelReserve <decl-part/> UserProcess
-book?:COPY<ax-part/> book?&isin;dom reserevelist
+</schema-box><schemadef><schname ident="ContinueBorrow" kind="schema"></schname><decpart><schname ident="UserProcess" kind="schema"></schname><decl><namelist><name ident="book?" kind="expr"></name></namelist><name ident="COPY" kind="expr"></name></decl><decl><namelist><name ident="time?" kind="expr"></name></namelist><name ident="&Nopf;" kind="expr"></name></decl></decpart><axpart><relchain><name ident="book?" kind="expr"></name><name ident="&isin;" class="other" kind="expr"></name><op kind="expr" type="inop"><name ident="\" class="infun" kind="expr"></name><name ident="allbooks" kind="expr"></name><name ident="available" kind="expr"></name></op></relchain><relchain><name ident="book?" kind="expr"></name><name ident="&notin;" class="inrel" kind="expr"></name><name ident="continue_borrowing" kind="expr"></name></relchain><relchain><name ident="time?" kind="expr"></name><name ident="&gt;" class="inrel" kind="expr"></name><op kind="expr" type="inop"><name ident="-" class="other" kind="expr"></name><op kind="expr" type="inop"><name ident="+" class="infun" kind="expr"></name><application><name ident="borrow_time" kind="expr"></name><name ident="book?" kind="expr"></name></application><name ident="MAXTIME" kind="expr"></name></op><name ident="MAXCONTINUEDAYS" kind="expr"></name></op></relchain><relchain><name ident="time?" kind="expr"></name><name ident="&leq;" class="inrel" kind="expr"></name><op kind="expr" type="inop"><name ident="+" class="infun" kind="expr"></name><application><name ident="borrow_time" kind="expr"></name><name ident="book?" kind="expr"></name></application><name ident="MAXTIME" kind="expr"></name></op></relchain><relchain><application><name ident="belonging" kind="expr"></name><name ident="book?" kind="expr"></name></application><name ident="=" class="inrel" kind="expr"></name><name ident="id?" kind="expr"></name></relchain><relchain><name ident="borrow_time'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><op kind="expr" type="inop"><name ident="&oplus;" class="infun" kind="expr"></name><name ident="borrow_time" kind="expr"></name><display type="set"><parenform kind="expr"><op kind="expr" type="inop"><name ident="&rtarr;" class="infun" kind="expr"></name><name ident="book?" kind="expr"></name><name ident="time?" kind="expr"></name></op></parenform></display></op></relchain><relchain><name ident="continue_borrowing'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><op kind="expr" type="inop"><name ident="&cup;" class="infun" kind="expr"></name><name ident="continue_borrowing" kind="expr"></name><display type="set"><name ident="book?" kind="expr"></name></display></op></relchain></axpart></schemadef></textItem
+><textItem location="gui::50"><schema-box location="gui::50"> CancelReserve <decl-part/>         UserProcess
+book?:BOOK<ax-part/>         book?&isin;<word style="roman"/>dom<word/> reservelist
 id?&isin;<word style="roman"/>ran<word/>(reservelist(book?))
-reservelist' = reservelist&oplus;{book?, squash(reservelistbook&vrtrib;id?)}
-</schema-box></textItem
+reservelist' = reservelist&oplus;{book?&rtarr;squash(reservelist(book?)&vrtrib;{id?})}
+</schema-box><schemadef><schname ident="CancelReserve" kind="schema"></schname><decpart><schname ident="UserProcess" kind="schema"></schname><decl><namelist><name ident="book?" kind="expr"></name></namelist><name ident="BOOK" kind="expr"></name></decl></decpart><axpart><relchain><name ident="book?" kind="expr"></name><name ident="&isin;" class="other" kind="expr"></name><application><name style="roman" ident="dom" kind="expr"></name><name ident="reservelist" kind="expr"></name></application></relchain><relchain><name ident="id?" kind="expr"></name><name ident="&isin;" class="other" kind="expr"></name><application><name style="roman" ident="ran" kind="expr"></name><parenform kind="expr"><application><name ident="reservelist" kind="expr"></name><name ident="book?" kind="expr"></name></application></parenform></application></relchain><relchain><name ident="reservelist'" kind="expr"></name><name ident="=" class="inrel" kind="expr"></name><op kind="expr" type="inop"><name ident="&oplus;" class="infun" kind="expr"></name><name ident="reservelist" kind="expr"></name><display type="set"><parenform kind="expr"><op kind="expr" type="inop"><name ident="&rtarr;" class="infun" kind="expr"></name><name ident="book?" kind="expr"></name><application><name ident="squash" kind="expr"></name><parenform kind="expr"><op kind="expr" type="inop"><name ident="&vrtrib;" class="infun" kind="expr"></name><application><name ident="reservelist" kind="expr"></name><name ident="book?" kind="expr"></name></application><display type="set"><name ident="id?" kind="expr"></name></display></op></parenform></application></op></parenform></display></op></relchain></axpart></schemadef></textItem
+><script name="RESERVE$domainCheck"><scriptItem><ztext>prove by reduce</ztext><provercmd name="prove-by-reduce"></provercmd></scriptItem
+></script
 ><script name="REMIND$domainCheck"></script
-><script name="ContinueBorrow$domainCheck"></script
 ><script name="BOOKSTORE$domainCheck"><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
 ></script
+><script name="RETURN$domainCheck"></script
 ><script name="BORROW$domainCheck"><scriptItem><ztext>next</ztext></scriptItem
 ><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
 ><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
@@ -241,8 +251,4 @@ borrow_time' = borrow_time &oplus; {(book? &rtarr; time?)}
 ><scriptItem><ztext>prove by reduce</ztext><provercmd name="prove-by-reduce"></provercmd></scriptItem
 ><scriptItem><ztext>prove</ztext></scriptItem
 ></script
-><script name="FINE$domainCheck"></script
-><script name="RESERVE$domainCheck"><scriptItem><ztext>prove by reduce</ztext><provercmd name="prove-by-reduce"></provercmd></scriptItem
-></script
-><script name="RETURN$domainCheck"></script
 ></Z-EVES-GUI-State>

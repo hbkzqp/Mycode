@@ -1,0 +1,414 @@
+{\rtf\ansi{\fonttbl
+{\f0\froman Times New Roman;}
+{\f1\ftech Symbol;}
+{\f2\fnil \fprq2 \fcharset2 Zedfont;}}
+\plain \keep 
+\par {\f2 \'ae}{\f0 \i MAXTIME: }{\f2 N}{\f0 \i \line
+
+}
+\par {\f2 \'ae}{\f0 \i MAXCONTINUEDAYS: }{\f2 N}{\f0 \i \line
+
+}
+\par {\f2 \'ae}{\f0 \i FINE_EVERYDAY: }{\f2 N}{\f0 \i \line
+
+}
+\par {\f2 \'ae}{\f0 \i MAXNUMBER: }{\f2 N}{\f0 \i \line
+
+}
+\par {\f2 \'ae}{\f0 \i TIME_TO_REMIND: }{\f2 N}{\f0 \i \line
+
+}
+\par {\f0 [}{\f0 \i TIME}{\f0 ]
+}\line
+\par {\f0 [}{\f0 \i COPY}{\f0 ]
+}\line
+\par {\f0 [}{\f0 \i USER}{\f0 ]
+}\line
+\par {\f0 [}{\f0 \i AUTHOR}{\f0 ]
+}\line
+\par {\f0 [}{\f0 \i SUBJECT}{\f0 ]
+}\line
+\par {\f0 [}{\f0 \i TITLE}{\f0 ]
+}\line
+\par {\f2 \'c8_}{\f0 \i BOOK }{\f2 ____________________________________\line
+\'ae}{\f0 \i bookid: }{\f2 N}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i authors: }{\f2 P}{\f0 \i  AUTHOR\line
+}{\f2 \'ae}{\f0 \i title: TITLE\line
+}{\f2 \'ae}{\f0 \i year: }{\f2 N}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i subjects: }{\f2 P}{\f0 \i  SUBJECT\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i USERS}{\f2 ____________________________________\line
+\'ae}{\f0 \i administrators: }{\f2 P}{\f0 \i  USER\line
+}{\f2 \'ae}{\f0 \i customers: }{\f2 P}{\f0 \i  USER\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i administrators }{\f2 \fs18 I}{\f0 \i  customers = }{\f2 0}{\f0 \i \line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i BOOKSTORE}{\f2 __________________________________\line
+\'ae}{\f0 \i available: }{\f2 P}{\f0 \i  COPY\line
+}{\f2 \'ae}{\f0 \i allbooks: }{\f2 P}{\f0 \i  COPY\line
+}{\f2 \'ae}{\f0 \i belonging: COPY }{\f2 \'a7}{\f0 \i  USER\line
+}{\f2 \'ae}{\f0 \i copy_info: COPY }{\f2 \'a7}{\f0 \i  BOOK\line
+}{\f2 \'ae}{\f0 \i borrow_time: COPY }{\f2 \'a7}{\f0 \i  }{\f2 N}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i reservelist: BOOK }{\f2 \'a7}{\f0 \i  }{\f0 seq}{\f0 \i  USER\line
+}{\f2 \'ae}{\f0 \i continue_borrowing: }{\f2 P}{\f0 \i  COPY\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 dom}{\f0 \i  belonging }{\f2 \fs18 U}{\f0 \i  available = allbooks\line
+}{\f2 \'ae}{\f0 dom}{\f0 \i  copy_info = allbooks\line
+}{\f2 \'ae}{\f0 \i available }{\f2 z}{\f0 \i  allbooks\line
+}{\f2 \'ae}{\f0 dom}{\f0 \i  borrow_time }{\f2 \fs18 U}{\f0 \i  available = allbooks\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i LIB}{\f2 _____________________________________\line
+\'ae}{\f0 \i BOOKSTORE\line
+}{\f2 \'ae}{\f0 \i USERS\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 ran}{\f0 \i  belonging }{\f2 z}{\f0 \i  administrators }{\f2 \fs18 U}{\f0 \i  customers\line
+}{\f2 \'aeA}{\f0 \i  users: }{\f0 ran}{\f0 \i  reservelist }{\f2 \'a5 }{\f0 ran}{\f0 \i  users }{\f2 z}{\f0 \i  administrators }{\f2 \fs18 U}{\f0 \i  customers\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i LIBInit}{\f2 ___________________________________\line
+\'ae}{\f0 \i LIB\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i administrators = }{\f2 0}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i customers = }{\f2 0}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i available = }{\f2 0}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i allbooks = }{\f2 0}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i belonging = }{\f2 0}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i copy_info = }{\f2 0}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i borrow_time = }{\f2 0}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i reservelist = }{\f2 0}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i continue_borrowing = }{\f2 0}{\f0 \i \line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i AdministratorProcess }{\f2 ____________________________\line
+\'ae}{\f0 \i }{\f1 D}{\f0 \i LIB\line
+}{\f2 \'ae}{\f0 \i person?: USER\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i person? }{\f2 e}{\f0 \i  administrators\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i UserProcess}{\f2 _________________________________\line
+\'ae}{\f0 \i }{\f1 D}{\f0 \i LIB\line
+}{\f2 \'ae}{\f0 \i person?: USER\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i person? }{\f2 e}{\f0 \i  administrators }{\f2 \fs18 U}{\f0 \i  customers\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i BORROW }{\f2 ___________________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i borrowuser?: USER\line
+}{\f2 \'ae}{\f0 \i book?: COPY\line
+}{\f2 \'ae}{\f0 \i time?: }{\f2 N}{\f0 \i \line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i book? }{\f2 e}{\f0 \i  available\line
+}{\f2 \'ae}{\f0 \i borrowuser? }{\f2 e}{\f0 \i  administrators }{\f2 \fs18 U}{\f0 \i  customers\line
+}{\f2 \'ae}{\f0 \i # }{\f2 (}{\f0 \i belonging }{\f2 t}{\f0 \i  }{\f2 \{}{\f0 \i borrowuser?}{\f2 \})}{\f0 \i  }{\f2 <}{\f0 \i  MAXNUMBER\line
+}{\f2 \'ae}{\f0 \i book? }{\f2 \'e4}{\f0 \i  }{\f0 dom}{\f0 \i  belonging\line
+}{\f2 \'ae}{\f0 \i copy_info book? }{\f2 \'e4}{\f0 \i  }{\f0 dom}{\f0 \i  reservelist\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i available' }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i book?}{\f2 \}}{\f0 \i  = available\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging }{\f2 \fs18 U}{\f0 \i  }{\f2 \{(}{\f0 \i book? }{\f2 \'b8}{\f0 \i  borrowuser?}{\f2 )\}\line
+\'ae}{\f0 \i borrow_time' = borrow_time }{\f2 \fs18 U}{\f0 \i  }{\f2 \{(}{\f0 \i book? }{\f2 \'b8}{\f0 \i  time?}{\f2 )\}\line
+\'ae}{\f0 \i reservelist' = reservelist\line
+}{\f2 \'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f0 \b incomplete proof of }{\f0 \i BORROW$domainCheck\line
+  next\line
+  }{\f0 prove\line
+}{\f0 \i   }{\f0 prove\line
+}{\f0 \i   prove\line
+  prove\line
+  next\line
+  next\line
+  next\line
+  next\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  prove\line
+  }{\f0 prove by reduce\line
+}{\f0 \i   prove
+}\line
+\par {\f2 \'c8_}{\f0 \i RETURN }{\f2 ___________________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i book?: COPY\line
+}{\f2 \'ae}{\f0 \i user?: USER\line
+}{\f2 \'ae}{\f0 \i time?: }{\f2 N}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i fine!: }{\f2 N}{\f0 \i \line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i administrators' = administrators\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i book? }{\f2 \'e4}{\f0 \i  available\line
+}{\f2 \'ae}{\f0 \i book? }{\f2 e}{\f0 \i  allbooks\line
+}{\f2 \'ae}{\f0 \i user? }{\f2 e}{\f0 \i  administrators }{\f2 \fs18 U}{\f0 \i  customers\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'ae}{\f0 \i reservelist }{\f2 (}{\f0 \i copy_info book?}{\f2 )}{\f0 \i  = }{\f2 \'e3\'f1\line
+\'ae}{\f0 \i }{\f2 \'de}{\f0 \i  reservelist' = reservelist\line
+}{\f2 \'ae}{\f0 \i   }{\f2 \'a6}{\f0 \i  available' }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i book?}{\f2 \}}{\f0 \i  = available\line
+}{\f2 \'ae}{\f0 \i   }{\f2 \'a6}{\f0 \i  belonging' }{\f2 \fs18 U}{\f0 \i  }{\f2 \{(}{\f0 \i book? }{\f2 \'b8}{\f0 \i  user?}{\f2 )\}}{\f0 \i  = belonging\line
+}{\f2 \'ae}{\f0 \i }{\f2 !}{\f0 \i  reservelist }{\f2 (}{\f0 \i copy_info book?}{\f2 )}{\f0 \i  = }{\f2 \'e3\'f1\line
+\'ae}{\f0 \i }{\f2 \'de}{\f0 \i  available' = available\line
+}{\f2 \'ae}{\f0 \i   }{\f2 \'a6}{\f0 \i  belonging' = belonging }{\f2 \'b1}{\f0 \i  }{\f2 \{(}{\f0 \i book? }{\f2 \'b8}{\f0 \i  head }{\f2 (}{\f0 \i reservelist }{\f2 (}{\f0 \i copy_info book?}{\f2 )))\}\line
+\'ae}{\f0 \i   }{\f2 \'a6}{\f0 \i  reservelist'\line
+}{\f2 \'ae}{\f0 \i       = reservelist\line
+}{\f2 \'ae}{\f0 \i         }{\f2 \'b1}{\f0 \i  }{\f2 \{(}{\f0 \i copy_info book? }{\f2 \'b8}{\f0 \i  tail }{\f2 (}{\f0 \i reservelist }{\f2 (}{\f0 \i copy_info book?}{\f2 )))\}\line
+\'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'ae}{\f0 \i time? }{\f2 >}{\f0 \i  borrow_time book? + MAXTIME\line
+}{\f2 \'ae}{\f0 \i }{\f2 \'de}{\f0 \i  fine! = FINE_EVERYDAY * }{\f2 (}{\f0 \i time? - borrow_time book? - MAXTIME}{\f2 )\line
+\'ae}{\f0 \i time? }{\f2 \'f8}{\f0 \i  borrow_time book? + MAXTIME }{\f2 \'de}{\f0 \i  fine! = }{\f0 0\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i ADDBOOK}{\f2 ___________________________________\line
+\'ae}{\f0 \i AdministratorProcess\line
+}{\f2 \'ae}{\f0 \i copy?: COPY\line
+}{\f2 \'ae}{\f0 \i book?: BOOK\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i copy? }{\f2 \'e4}{\f0 \i  allbooks\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info }{\f2 \fs18 U}{\f0 \i  }{\f2 \{(}{\f0 \i copy? }{\f2 \'b8}{\f0 \i  book?}{\f2 )\}\line
+\'ae}{\f0 \i available' = available }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i copy?}{\f2 \}\line
+\'ae}{\f0 \i allbooks' = allbooks }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i copy?}{\f2 \}\line
+\'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'ae}{\f0 \i reservelist' = reservelist\line
+}{\f2 \'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i REMOVEBOOK }{\f2 _________________________________\line
+\'ae}{\f0 \i AdministratorProcess\line
+}{\f2 \'ae}{\f0 \i copy?: COPY\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i copy? }{\f2 e}{\f0 \i  available\line
+}{\f2 \'ae}{\f0 \i allbooks' }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i copy?}{\f2 \}}{\f0 \i  = allbooks\line
+}{\f2 \'ae}{\f0 \i available' }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i copy?}{\f2 \}}{\f0 \i  = available\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = }{\f2 \{}{\f0 \i copy?}{\f2 \}}{\f0 \i  }{\f2 y}{\f0 \i  copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time = borrow_time'\line
+}{\f2 \'ae}{\f0 \i reservelist' = reservelist\line
+}{\f2 \'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i ADDCUSTOMER}{\f2 _________________________________\line
+\'ae}{\f0 \i AdministratorProcess\line
+}{\f2 \'ae}{\f0 \i customer?: USER\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i customer? }{\f2 \'e4}{\f0 \i  customers }{\f2 \fs18 U}{\f0 \i  administrators\line
+}{\f2 \'ae}{\f0 \i customers' = customers }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i customer?}{\f2 \}\line
+\'ae}{\f0 \i administrators' = administrators\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging = belonging'\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'ae}{\f0 \i reservelist' = reservelist\line
+}{\f2 \'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i REMOVECUSTOMER }{\f2 _______________________________\line
+\'ae}{\f0 \i AdministratorProcess\line
+}{\f2 \'ae}{\f0 \i customer?: USER\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i customer? }{\f2 e}{\f0 \i  customers'\line
+}{\f2 \'ae}{\f0 \i customers' }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i customer?}{\f2 \}}{\f0 \i  = customers\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'ae}{\f0 \i reservelist' = reservelist\line
+}{\f2 \'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i ADDADMINISTRTOR}{\f2 _______________________________\line
+\'ae}{\f0 \i AdministratorProcess\line
+}{\f2 \'ae}{\f0 \i administrator?: USER\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i administrator? }{\f2 \'e4}{\f0 \i  administrators }{\f2 \fs18 U}{\f0 \i  customers\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i administrator?}{\f2 \}\line
+\'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'ae}{\f0 \i reservelist' = reservelist\line
+}{\f2 \'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i REMOVEADMINISTRATOR}{\f2 _____________________________\line
+\'ae}{\f0 \i AdministratorProcess\line
+}{\f2 \'ae}{\f0 \i administrator?: USER\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i administrator? }{\f2 \'e4}{\f0 \i  administrators\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i administrator?}{\f2 \}\line
+\'ae}{\f0 \i administrator? }{\f2 \'e4}{\f0 \i  customers'\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i RESERVE}{\f2 ___________________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i book?: BOOK\line
+}{\f2 \'ae}{\f0 \i user?: USER\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i }{\f2 !}{\f0 \i  }{\f0 dom}{\f0 \i  }{\f2 (}{\f0 \i copy_info }{\f2 t}{\f0 \i  }{\f2 \{}{\f0 \i book?}{\f2 \})}{\f0 \i  }{\f2 z}{\f0 \i  available\line
+}{\f2 \'ae}{\f0 \i reservelist book? }{\f2 \fs18 U}{\f0 \i  }{\f2 \'e3}{\f0 \i user?}{\f2 \'f1}{\f0 \i  = reservelist' book?\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators'\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'ae}{\f0 \i continue_borrowing' = continue_borrowing\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f0 \b incomplete proof of }{\f0 \i RESERVE$domainCheck\line
+  }{\f0 prove by reduce
+}\line
+\par {\f2 \'c8_}{\f0 \i REMIND }{\f2 ___________________________________\line
+\'ae}{\f0 \i AdministratorProcess\line
+}{\f2 \'ae}{\f0 \i time?: }{\f2 N}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i overtimelist!: }{\f2 P}{\f0 \i  COPY\line
+}{\f2 \'c7_______________\line
+\'aeA}{\f0 \i  copy: overtimelist! }{\f2 \'a5 }{\f0 \i borrow_time copy - time? }{\f2 <}{\f0 \i  TIME_TO_REMIND\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators'\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i SEARCH_BY_AUTHOR }{\f2 ______________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i author?: AUTHOR\line
+}{\f2 \'ae}{\f0 \i result!: }{\f2 P}{\f0 \i  BOOK\line
+}{\f2 \'c7_______________\line
+\'aeA}{\f0 \i  book: result! }{\f2 \'a5 }{\f0 \i author? }{\f2 e}{\f0 \i  book.authors\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators'\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i SEARCH_BY_TITLE}{\f2 _______________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i title?: TITLE\line
+}{\f2 \'ae}{\f0 \i result!: }{\f2 P}{\f0 \i  BOOK\line
+}{\f2 \'c7_______________\line
+\'aeA}{\f0 \i  book: result! }{\f2 \'a5 }{\f0 \i book.title = title?\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators'\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i SEARCH_BY_ID }{\f2 ________________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i bookid?: }{\f2 N}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i result!: }{\f2 P}{\f0 \i  BOOK\line
+}{\f2 \'c7_______________\line
+\'aeA}{\f0 \i  book: result! }{\f2 \'a5 }{\f0 \i book.bookid = bookid?\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators'\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i SEARCH_BY_TIME }{\f2 _______________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i year?: }{\f2 N}{\f0 \i \line
+}{\f2 \'ae}{\f0 \i result!: }{\f2 P}{\f0 \i  BOOK\line
+}{\f2 \'c7_______________\line
+\'aeA}{\f0 \i  book: result! }{\f2 \'a5 }{\f0 \i book.year = year?\line
+}{\f2 \'ae}{\f0 \i administrators' = administrators'\line
+}{\f2 \'ae}{\f0 \i customers' = customers\line
+}{\f2 \'ae}{\f0 \i available' = available\line
+}{\f2 \'ae}{\f0 \i allbooks' = allbooks\line
+}{\f2 \'ae}{\f0 \i belonging' = belonging\line
+}{\f2 \'ae}{\f0 \i copy_info' = copy_info\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time\line
+}{\f2 \'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i ContinueBorrow }{\f2 _______________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i book?: COPY\line
+}{\f2 \'ae}{\f0 \i time?: }{\f2 N}{\f0 \i \line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i book? }{\f2 e}{\f0 \i  allbooks \\ available\line
+}{\f2 \'ae}{\f0 \i book? }{\f2 \'e4}{\f0 \i  continue_borrowing\line
+}{\f2 \'ae}{\f0 \i time? }{\f2 >}{\f0 \i  borrow_time book? + MAXTIME - MAXCONTINUEDAYS\line
+}{\f2 \'ae}{\f0 \i time? }{\f2 \'f8}{\f0 \i  borrow_time book? + MAXTIME\line
+}{\f2 \'ae}{\f0 \i belonging book? = id?\line
+}{\f2 \'ae}{\f0 \i borrow_time' = borrow_time }{\f2 \'b1}{\f0 \i  }{\f2 \{(}{\f0 \i book? }{\f2 \'b8}{\f0 \i  time?}{\f2 )\}\line
+\'ae}{\f0 \i continue_borrowing' = continue_borrowing }{\f2 \fs18 U}{\f0 \i  }{\f2 \{}{\f0 \i book?}{\f2 \}\line
+\'d0_______________________________________\line
+
+}
+\par {\f2 \'c8_}{\f0 \i CancelReserve}{\f2 ________________________________\line
+\'ae}{\f0 \i UserProcess\line
+}{\f2 \'ae}{\f0 \i book?: BOOK\line
+}{\f2 \'c7_______________\line
+\'ae}{\f0 \i book? }{\f2 e}{\f0 \i  }{\f0 dom}{\f0 \i  reservelist\line
+}{\f2 \'ae}{\f0 \i id? }{\f2 e}{\f0 \i  }{\f0 ran}{\f0 \i  }{\f2 (}{\f0 \i reservelist book?}{\f2 )\line
+\'ae}{\f0 \i reservelist' = reservelist }{\f2 \'b1}{\f0 \i  }{\f2 \{(}{\f0 \i book? }{\f2 \'b8}{\f0 \i  squash }{\f2 (}{\f0 \i reservelist book? }{\f2 u}{\f0 \i  }{\f2 \{}{\f0 \i id?}{\f2 \}))\}\line
+\'d0_______________________________________\line
+
+}}
