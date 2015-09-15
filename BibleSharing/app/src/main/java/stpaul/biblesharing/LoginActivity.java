@@ -71,6 +71,7 @@ public class LoginActivity extends ActionBarActivity {
         SharedPreferences.Editor edit = share.edit();
         edit.putString(CommonInfo.USER_NAME,ID);
         edit.putString(CommonInfo.PASSWORD, pw);
+        edit.commit();
     }
     public boolean checkShare()
     {
@@ -83,7 +84,7 @@ public class LoginActivity extends ActionBarActivity {
         Login(share.getString(CommonInfo.USER_NAME,""),share.getString(CommonInfo.PASSWORD,""));
         return true;
     }
-    private void  Login(String ID,String pw)
+    private void  Login(final String ID, final String pw)
     {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -124,6 +125,7 @@ public class LoginActivity extends ActionBarActivity {
     }
     private void initWidget()
     {
+
         userArea = (EditText) findViewById(R.id.UserNameArea);
         setForgetPw();
         setRegisterBtn();

@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">BibleSharing</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="register">Register</string>
+    <string name="visitor_login">Visitor</string>
+    <string name="login">Log In</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="comfirm_password">Confirm Password</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="get_verification">Get Verification Code</string>
+    
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_forget_password">ForgetPasswordActivity</string>
+    <string name="title_activity_bible">BibleActivity</string>
+</resources>

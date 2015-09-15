@@ -9,10 +9,8 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        style="@style/TextStyle"
         android:inputType="textEmailAddress"
-        android:background="#45936828"
-        android:ems="10"
         android:layout_centerInParent="true"
         android:hint="@string/username"
         android:id="@+id/RUserNameArea"
@@ -22,10 +20,8 @@
         android:layout_alignParentStart="true" />
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="45dp"
         android:inputType="textPassword"
-        android:background="#45936828"
-        android:ems="10"
+        style="@style/TextStyle"
         android:layout_centerInParent="true"
         android:hint="@string/password"
         android:id="@+id/RPasswordArea"
@@ -34,9 +30,8 @@
         android:layout_above="@+id/RCPasswordArea"></EditText>
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="45dp"
         android:inputType="textPassword"
-        android:background="#45936828"
+        style="@style/TextStyle"
         android:ems="10"
         android:hint="@string/comfirm_password"
         android:id="@+id/RCPasswordArea"

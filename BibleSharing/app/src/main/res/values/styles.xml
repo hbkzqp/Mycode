@@ -8,8 +8,16 @@
     <style name="TextStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">45dp</item>
-        <item name="android:background">#45936828</item>
+        <item name="android:background">#FF9B7D59</item>
         <item name="android:ems">10</item>
+    </style>
+    <style name="ButtonStyle1">
+        <item name="android:layout_width">150sp</item>
+        <item name="android:layout_height">25sp</item>
+        <item name="android:layout_marginLeft">85dp</item>
+        <item name="android:background">#FF9B7D59</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:layout_marginBottom">10dp</item>
     </style>
 
 </resources>

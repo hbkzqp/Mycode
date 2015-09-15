@@ -1,4 +1,4 @@
-<Z-EVES-GUI-State version="1" index="64"><textItem location="gui::26" history="2"><axiomatic-box location="gui::26"><decl-part/>MAXTIME:&Nopf;</axiomatic-box></textItem
+<Z-EVES-GUI-State version="1" index="76"><textItem location="gui::26" history="2"><axiomatic-box location="gui::26"><decl-part/>MAXTIME:&Nopf;</axiomatic-box></textItem
 ><textItem location="gui::49" history="3"><axiomatic-box location="gui::49"><decl-part/>MAXCONTINUEDAYS:&Nopf;</axiomatic-box></textItem
 ><textItem location="gui::11" history="4"><axiomatic-box location="gui::11"><decl-part/>FINE_EVERYDAY: &Nopf;</axiomatic-box></textItem
 ><textItem location="gui::1" history="5"><axiomatic-box location="gui::1"><decl-part/>MAXNUMBER: &Nopf;</axiomatic-box></textItem
@@ -42,15 +42,16 @@ continue_borrowing=&empty;</schema-box></textItem
 person?: USER<ax-part/> person? &isin; administrators</schema-box></textItem
 ><textItem location="gui::46" history="19"><schema-box location="gui::46">UserProcess<decl-part/>  &Delta;LIB
 person?: USER<ax-part/>  person? &isin; administrators &cup; customers</schema-box></textItem
-><textItem location="gui::18" history="20"><schema-box location="gui::18">BORROW<decl-part/>   UserProcess
+><textItem location="gui::18" history="20"><schema-box location="gui::18">BORROW<decl-part/> UserProcess
 book?: COPY
-time?: &Nopf;<ax-part/>   book? &isin; available
+time?: &Nopf;<ax-part/> book? &isin; available
 person? &isin; administrators &cup; customers
 # (belonging &vrtri; {person?}) &lt; MAXNUMBER
 book? &notin; <word style="roman"/>dom<word/> belonging
 copy_info book? &notin; <word style="roman"/>dom<word/> reservelist
 allbooks' = allbooks
 available' &cup; {book?} = available
+book?&isin;<word style="roman"/>dom<word/>copy_info
 copy_info' = copy_info
 belonging' = belonging &cup; {(book? &rtarr; person?)}
 borrow_time' = borrow_time &cup; {(book? &rtarr; time?)}
@@ -65,14 +66,17 @@ fine!: &Nopf;<ax-part/> administrators' = administrators
 customers' = customers
 book? &notin; available
 book? &isin; allbooks
+book? &isin; <word style="roman"/>dom<word/> borrow_time
 person? &isin; administrators &cup; customers
 allbooks' = allbooks
 copy_info' = copy_info
-borrow_time' = borrow_time
-reservelist (copy_info book?) = &lang;&rang;
+borrow_time' = borrow_time&oplus;{(book?&rtarr;time?)}
+reservelist (copy_info book?) &isin; <word style="roman"/>seq<word/> USER
+copy_info book? &isin; <word style="roman"/>dom<word/> reservelist
+reservelist (copy_info book?) = &lang;&rang; &vee; reservelist (copy_info book?) = &empty;
 &rArr; reservelist' = reservelist
   &wedge; available' &cup; {book?} = available
-  &wedge; belonging' &cup; {(book? &rtarr; person?)} = belonging
+  &wedge; belonging' = belonging &oplus; {(book? &rtarr; person?)}
 &not; reservelist (copy_info book?) = &lang;&rang;
 &rArr; available' = available
   &wedge; belonging' = belonging &oplus; {(book? &rtarr; head (reservelist (copy_info book?)))}
@@ -82,8 +86,9 @@ reservelist (copy_info book?) = &lang;&rang;
 time? &gt; borrow_time book? + MAXTIME
 &rArr; fine! = FINE_EVERYDAY * (time? - borrow_time book? - MAXTIME)
 time? &leq; borrow_time book? + MAXTIME &rArr; fine! = 0
-<word style="bold"/>if<word/> book?&isin;continue_borrowing<word style="bold"/>then<word/>continue_borrowing'=continue_borrowing\{book?}
-<word style="bold"/>else<word/>continue_borrowing' = continue_borrowing</schema-box></textItem
+<word style="bold"/>if<word/> book? &isin; continue_borrowing
+<word style="bold"/>then<word/> continue_borrowing' = continue_borrowing \ {book?}
+<word style="bold"/>else<word/> continue_borrowing' = continue_borrowing</schema-box></textItem
 ><textItem location="gui::28" history="22"><schema-box location="gui::28">ADDBOOK<decl-part/> AdministratorProcess
 copy?: COPY
 book?: BOOK<ax-part/> copy? &notin; allbooks
@@ -153,9 +158,10 @@ borrow_time' = borrow_time
 continue_borrowing'=continue_borrowing</schema-box></textItem
 ><textItem location="gui::36" history="28"><schema-box location="gui::36">RESERVE<decl-part/> UserProcess
 book?: BOOK<ax-part/> &not; <word style="roman"/>dom<word/> (copy_info &vrtri; {book?}) &subeq; available
-book? &isin; <word style="roman"/>dom<word/> reservelist
+book? &isin; <word style="roman"/>dom<word/> reservelist
 person? &notin; <word style="roman"/>ran<word/> (reservelist book?)
-reservelist book? &cup; &lang;person?&rang; = reservelist' book?
+reservelist(book?)&isin;<word style="roman"/>seq<word/>USER
+reservelist' = reservelist &oplus; {(book? &rtarr; reservelist book? &frown; &lang;person?&rang;)}
 administrators' = administrators'
 customers' = customers
 available' = available
@@ -167,18 +173,41 @@ continue_borrowing' = continue_borrowing</schema-box></textItem
 ><textItem location="gui::50" history="29"><schema-box location="gui::50">CancelReserve<decl-part/> UserProcess
 book?: BOOK<ax-part/> book? &isin; <word style="roman"/>dom<word/> reservelist
 person? &isin; <word style="roman"/>ran<word/> (reservelist book?)
-reservelist' = reservelist &oplus; {(book? &rtarr; squash (reservelist book? &vrtrib; {person?}))}</schema-box></textItem
-><textItem location="gui::39" history="30"><schema-box location="gui::39">REMIND<decl-part/>  AdministratorProcess
-time?: &Nopf;
-overtimelist!: &Popf; COPY<ax-part/>  &forall; copy: overtimelist! &bullet; borrow_time copy - time? &lt; TIME_TO_REMIND
+reservelist'
+  = reservelist &oplus; {(book? &rtarr; squash (reservelist book? &vrtrib; {person?}))}
+reservelist(book?)&vrtrib;{person?}&isin;&Nopf;&sub1;&Rarrb;USER
 administrators' = administrators'
 customers' = customers
 available' = available
 allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
-borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::40" history="31"><schema-box location="gui::40">SEARCH_BY_AUTHOR<decl-part/> UserProcess
+borrow_time' = borrow_time
+continue_borrowing' = continue_borrowing</schema-box></textItem
+><textItem location="gui::39" history="30"><schema-box location="gui::39">REMIND<decl-part/> AdministratorProcess
+time?: &Nopf;
+overtimelist!: &Popf; COPY<ax-part/> &forall; copy: <word style="roman"/>dom<word/> borrow_time
+    &bullet; borrow_time copy - time? &lt; TIME_TO_REMIND &rArr;copy &isin; overtimelist!
+administrators' = administrators'
+customers' = customers
+available' = available
+allbooks' = allbooks
+belonging' = belonging
+copy_info' = copy_info
+borrow_time' = borrow_time
+continue_borrowing' = continue_borrowing</schema-box></textItem
+><textItem location="gui::68" history="31"><schema-box location="gui::68">  REMIND_Overdue<decl-part/> AdministratorProcess
+time?:&Nopf;
+overduelist!:&Popf;COPY<ax-part/> administrators'=administrators
+customers' = customers
+&forall;copy:<word style="roman"/>dom<word/>borrow_time&bullet;time?-borrow_time(copy)&gt;MAXTIME&rArr;copy&isin;overduelist!
+available'=available
+allbooks'=allbooks
+belonging'=belonging
+copy_info'=copy_info
+borrow_time'=borrow_time
+continue_borrowing'=continue_borrowing</schema-box></textItem
+><textItem location="gui::40" history="32"><schema-box location="gui::40">SEARCH_BY_AUTHOR<decl-part/> UserProcess
 author?: AUTHOR
 result!: &Popf; BOOK<ax-part/> &forall; book: result! &bullet; author? &isin; book.authors
 administrators' = administrators'
@@ -187,8 +216,9 @@ available' = available
 allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
-borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::41" history="32"><schema-box location="gui::41">SEARCH_BY_TITLE<decl-part/> UserProcess
+borrow_time' = borrow_time
+continue_borrowing' = continue_borrowing</schema-box></textItem
+><textItem location="gui::41" history="33"><schema-box location="gui::41">SEARCH_BY_TITLE<decl-part/> UserProcess
 title?: TITLE
 result!: &Popf; BOOK<ax-part/> &forall; book: result! &bullet; book.title = title?
 administrators' = administrators'
@@ -197,18 +227,20 @@ available' = available
 allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
-borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::42" history="33"><schema-box location="gui::42">SEARCH_BY_ID<decl-part/>  UserProcess
+borrow_time' = borrow_time
+continue_borrowing' = continue_borrowing</schema-box></textItem
+><textItem location="gui::42" history="34"><schema-box location="gui::42">SEARCH_BY_ID<decl-part/> UserProcess
 bookid?: &Nopf;
-result!: &Popf; BOOK<ax-part/>  &forall; book: result! &bullet; book.bookid = bookid?
+result!: &Popf; BOOK<ax-part/> &forall; book: result! &bullet; book.bookid = bookid?
 administrators' = administrators'
 customers' = customers
 available' = available
 allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
-borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::43" history="34"><schema-box location="gui::43">SEARCH_BY_TIME<decl-part/> UserProcess
+borrow_time' = borrow_time
+continue_borrowing' = continue_borrowing</schema-box></textItem
+><textItem location="gui::43" history="35"><schema-box location="gui::43">SEARCH_BY_TIME<decl-part/> UserProcess
 year?: &Nopf;
 result!: &Popf; BOOK<ax-part/> &forall; book: result! &bullet; book.year = year?
 administrators' = administrators'
@@ -217,52 +249,89 @@ available' = available
 allbooks' = allbooks
 belonging' = belonging
 copy_info' = copy_info
-borrow_time' = borrow_time</schema-box></textItem
-><textItem location="gui::48" history="35"><schema-box location="gui::48">ContinueBorrow<decl-part/> UserProcess
+borrow_time' = borrow_time
+continue_borrowing' = continue_borrowing</schema-box></textItem
+><textItem location="gui::48" history="36"><schema-box location="gui::48">ContinueBorrow<decl-part/> UserProcess
 book?: COPY
 time?: &Nopf;<ax-part/> book? &isin; allbooks \ available
-book?&isin;<word style="roman"/>dom<word/>belonging
+book? &isin; <word style="roman"/>dom<word/> belonging
 book? &notin; continue_borrowing
+book? &isin; <word style="roman"/>dom<word/> borrow_time
 time? &gt; borrow_time book? + MAXTIME - MAXCONTINUEDAYS
 time? &leq; borrow_time book? + MAXTIME
 belonging book? = person?
 borrow_time' = borrow_time &oplus; {(book? &rtarr; time?)}
-continue_borrowing' = continue_borrowing &cup; {book?}</schema-box></textItem
-><textItem location="gui::53" history="36"><schema-box location="gui::53">  GetBorrowInfo<decl-part/> &Xi;LIB
+continue_borrowing' = continue_borrowing &cup; {book?}
+administrators'=administrators
+customers'=customers
+available'=available
+allbooks'=allbooks
+belonging'=belonging
+copy_info'=copy_info
+borrow_time'=borrow_time
+continue_borrowing' = continue_borrowing</schema-box></textItem
+><textItem location="gui::53" history="37"><schema-box location="gui::53">  GetBorrowInfo<decl-part/> &Xi;LIB
 person?:USER
 infor!:&Popf;COPY<ax-part/> person?&isin;administrators&cup;customers
 infor!=<word style="roman"/>dom<word/>(belonging&vrtri;{person?})</schema-box></textItem
-><textItem location="gui::54" history="37"><schema-box location="gui::54">GetBorrowInfo_Admin<decl-part/> &Xi;LIB
+><textItem location="gui::54" history="38"><schema-box location="gui::54">GetBorrowInfo_Admin<decl-part/> &Xi;LIB
 admin?: USER
 person?: USER
 infor!: &Popf; COPY<ax-part/> admin? &isin; administrators
 person? &isin; administrators &cup; customers
 infor! = <word style="roman"/>dom<word/> (belonging &vrtri; {person?})</schema-box></textItem
-><textItem location="gui::55" history="38"><schema-box location="gui::55">GetReserveInfo<decl-part/> &Xi;LIB
+><textItem location="gui::55" history="39"><schema-box location="gui::55">GetReserveInfo<decl-part/> &Xi;LIB
 person?: USER
 info!: &Popf; BOOK<ax-part/> person? &isin; administrators &cup; customers
 &forall; book: info! &bullet; book&isin;<word style="roman"/>dom<word/>reservelist&wedge;person? &isin; <word style="roman"/>ran<word/> (reservelist book)</schema-box></textItem
-><textItem location="gui::56" history="39"><schema-box location="gui::56">GetReserveInfo_Admin  <decl-part/> &Xi;LIB
+><textItem location="gui::56" history="40"><schema-box location="gui::56">GetReserveInfo_Admin  <decl-part/> &Xi;LIB
 person?:USER
 admin?:USER
 info!:&Popf; BOOK<ax-part/> person?&isin;administrators&cup;customers
 admin?&isin;administrators
 &forall; book: info! &bullet; book &isin; <word style="roman"/>dom<word/> reservelist &wedge; person? &isin; <word style="roman"/>ran<word/> (reservelist book)</schema-box></textItem
-><textItem location="gui::57" history="40"><zed-box location="gui::57">&exists;LIB&bullet;LIBInit</zed-box></textItem
-><textItem location="gui::58" history="41"><zed-box location="gui::58">&forall;LIB;person?,admin?:USER&bullet;person?&isin;administrators&cup;customers&wedge;admin?&isin;administrators
-&rArr;<word style="roman"/>pre<word/> GetBorrowInfo_Admin</zed-box></textItem
-><textItem location="gui::60" history="42"><zed-box location="gui::60">&forall; LIB; book?: BOOK; person?: USER
-&bullet; person? &notin; <word style="roman"/>ran<word/> (reservelist book?)
-&wedge; &not; <word style="roman"/>dom<word/> (copy_info &vrtri; {book?}) &subeq; available
-&wedge; person? &notin; administrators &cup; customers&wedge;book?&isin;<word style="roman"/>dom<word/>reservelist
-&rArr; <word style="roman"/>pre<word/> RESERVE</zed-box></textItem
-><script name="REMIND$domainCheck"></script
-><script name="GetReserveInfo_Admin$domainCheck"></script
-><script name="ContinueBorrow$domainCheck"></script
-><script name="GetReserveInfo$domainCheck"></script
+><textItem location="gui::57" history="41"><theorem-def location="gui::57">LIBExists<ax-part/>   &exists; LIB &bullet; LIBInit</theorem-def></textItem
+><textItem location="gui::58" history="42"><theorem-def location="gui::58">AdminCanGetBorrowInfo<ax-part/> &forall; LIB; person?, admin?: USER
+&bullet; person? &isin; administrators &cup; customers &wedge; admin? &isin; administrators
+&rArr; <word style="roman"/>pre<word/> GetBorrowInfo_Admin</theorem-def></textItem
+><textItem location="gui::72" history="43"><theorem-def location="gui::72">UserCanGetBorrowInfo<ax-part/>   &forall; LIB; person?: USER
+&bullet; person? &isin; administrators &cup; customers
+ &rArr; <word style="roman"/>pre<word/> GetBorrowInfo</theorem-def></textItem
+><textItem location="gui::74" history="44"><theorem-def location="gui::74">UserCanReturnAfterBorrow<ax-part/>   &forall; LIB; person: USER; book: COPY; time1, time2: &Nopf;
+&bullet; (BORROW[person? := person, book? := book, time? := time1]
+&rArr; belonging' = belonging &cup; {(book &rtarr; person)})
+&wedge; (RETURN[person? := person, book? := book, time? := time2]
+&rArr; book &rtarr; person &isin; belonging)</theorem-def></textItem
+><textItem location="gui::75" history="45"><theorem-def location="gui::75">UserCanBorrowAfterReserve<ax-part/>   &forall; LIB; person: USER; book: BOOK; copy: COPY; time: &Nopf;
+&bullet; (RESERVE[person? := person, book? := book]
+&rArr; reservelist'
+= reservelist &oplus; {(book &rtarr; reservelist book &frown; &lang;person&rang;)})
+&wedge; (RETURN[person? := person, book? := copy, time? := time]
+&rArr; reservelist (copy_info copy) &neq; &lang;&rang;
+&rArr; belonging'
+= belonging
+&oplus; {(book? &rtarr; head (reservelist (copy_info book?)))})</theorem-def></textItem
+><script name="UserCanBorrowIfReserve"><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>next</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>simplify</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+></script
 ><script name="BOOKSTORE$domainCheck"><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
 ></script
-><script name="BORROW$domainCheck"><scriptItem><ztext>next</ztext></scriptItem
+><script name="BORROW$domainCheck"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>next</ztext></scriptItem
 ><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
 ><scriptItem><ztext>prove</ztext><provercmd name="prove-by-rewrite"></provercmd></scriptItem
 ><scriptItem><ztext>prove</ztext></scriptItem
@@ -286,10 +355,140 @@ info!:&Popf; BOOK<ax-part/> person?&isin;administrators&cup;customers
 ><scriptItem><ztext>prove by reduce</ztext><provercmd name="prove-by-reduce"></provercmd></scriptItem
 ><scriptItem><ztext>prove</ztext></scriptItem
 ></script
-><script name="CancelReserve$domainCheck"></script
-><script name="RESERVE$domainCheck"><scriptItem number="2"><ztext>prove by reduce</ztext></scriptItem
+><script name="GetBorrowInfodeclarationPart"><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
 ></script
-><script name="RETURN$domainCheck"></script
+><script name="RESERVE$domainCheck"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>prove by reduce</ztext><provercmd name="prove-by-reduce"></provercmd></scriptItem
+></script
+><script name="unnamed$n3$domainCheck"><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+></script
+><script name="REMIND$domainCheck"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>rewrite</ztext><provercmd name="rewrite"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="GetReserveInfo_Admin$domainCheck"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="GetReserveInfo$domainCheck"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="REMIND_Overdue$domainCheck"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="AdminCanGetBorrowInfo"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="ContinueBorrow$domainCheck"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="UserCanBorrowAfterReserve"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem number="3"><ztext>prove by reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+></script
+><script name="LIBExists"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem number="3"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="UserCanReturnAfterBorrow"></script
+><script name="canreturn"><scriptItem><ztext>prove by reduce</ztext><provercmd name="prove-by-reduce"></provercmd></scriptItem
+></script
 ><script name="unnamed$n5$domainCheck"><scriptItem><ztext>prenex</ztext></scriptItem
+></script
+><script name="Exists"><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="RETURN$domainCheck"><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="CanUserSearchById"><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+></script
+><script name="CancelReserve$domainCheck"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem number="3"><ztext>prove by reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+></script
+><script name="CanExtendBorrowing"><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>prove by reduce</ztext><provercmd name="prove-by-reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+></script
+><script name="UserCanGetBorrowInfo"><scriptItem number="2"><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>prove by reduce</ztext><provercmd name="prove-by-reduce"></provercmd></scriptItem
+><scriptItem><ztext>rewrite</ztext><provercmd name="rewrite"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
+><scriptItem><ztext>rewrite</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+><scriptItem><ztext>reduce</ztext></scriptItem
+></script
+><script name="slak"><scriptItem><ztext>reduce</ztext><provercmd name="reduce"></provercmd></scriptItem
 ></script
 ></Z-EVES-GUI-State>
